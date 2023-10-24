@@ -2,8 +2,8 @@
   "background_color": "#ffffff",
   "display": "standalone",
   "lang": "en",
-  "name": "linkup",
-  "short_name": "linkup",
+  "name": "LinkUp",
+  "short_name": "LinkUp",
   "start_url": "/?utm_source=web_app_manifest",
   "orientation": "portrait"
 }
