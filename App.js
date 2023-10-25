@@ -3,7 +3,10 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import HomePage from "./pages/HomePage";
+import HostEventPage from "./pages/HostEventPage";
+import JoinEventPage from "./pages/JoinEventPage";
 import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const navStack = [];
 
@@ -30,6 +33,15 @@ export default function App() {
       ) : null}
       {currentPage === "home" ? (
         <HomePage navigate={navigate} goBack={goBack} />
+      ) : null}
+      {currentPage === "host" ? (
+        <HostEventPage navigate={navigate} goBack={goBack} />
+      ) : null}
+      {currentPage === "join" ? (
+        <JoinEventPage navigate={navigate} goBack={goBack} />
+      ) : null}
+      {currentPage === "profile" ? (
+        <ProfilePage navigate={navigate} goBack={goBack} />
       ) : null}
       <StatusBar style="auto" />
     </View>
