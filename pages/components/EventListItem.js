@@ -1,11 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 
 const EventListItem = (props) => {
-  const { eventId, eventName, eventTime, isHosting, isAttending } = props;
+  const { id, eventName, eventTime, isHosting, isAttending } = props;
   return (
-    <View style={styles.itemBG}>
+    <View style={styles.container}>
       <Text style={styles.eventName}>{eventName}</Text>
-
       <Text style={styles.eventTime}>{eventTime}</Text>
     </View>
   );
@@ -15,25 +14,29 @@ export default EventListItem;
 
 const styles = StyleSheet.create({
   eventName: {
-    fontSize: 18,
+    fontSize: 25,
     flex: 2,
-    alignContent: "center",
+    justifyContent: "flex-start",
     color: "#fff",
+    margin: 5,
   },
   eventTime: {
-    fontSize: 18,
+    fontSize: 25,
     flex: 1,
     justifyContent: "flex-end",
-    alignContent: "center",
+    textAlign: "right",
+    margin: 5,
     color: "#fff",
   },
-  itemBG: {
-    borderRadius: 2,
-    alignContent: "center",
-    height: 30,
-    paddingLeft: 10,
+  container: {
+    flex: 1,
+    backgroundColor: "#111",
     flexDirection: "row",
-    alignSelf: "stretch",
-    backgroundColor: "#aaa",
+    width: "80%",
+    justifyContent: "center",
+    alignSelf: "center",
+    height: 40,
+    margin: 5,
+    borderRadius: 5,
   },
 });

@@ -1,18 +1,14 @@
 import { StyleSheet, TextInput, Text, View, Button } from "react-native";
 
 import Logo from "./components/Logo";
+import BackButton from "./components/BackButton";
 
 const HostEventPage = (props) => {
   const { navigate, goBack } = props;
   return (
     <View style={styles.container}>
       <Logo />
-      <Button
-        title="Back"
-        onPress={() => {
-          goBack();
-        }}
-      />
+      <BackButton goBack={goBack}/>
     </View>
   );
 };
