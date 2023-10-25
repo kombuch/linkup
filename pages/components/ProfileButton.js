@@ -1,4 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import {ProfileCircle} from 'iconoir-react-native';
+
 
 const ProfileButton = (props) => {
   const { navigate } = props;
@@ -8,9 +10,7 @@ const ProfileButton = (props) => {
         navigate("profile");
       }}
     >
-      <View style={styles.logoBG}>
-        <Text style={styles.header}>Profile</Text>
-      </View>
+      <ProfileCircle width='60' height='60'/>
     </Pressable>
   );
 };
