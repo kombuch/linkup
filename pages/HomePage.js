@@ -1,12 +1,14 @@
 import { StyleSheet, TextInput, Text, View, Button } from "react-native";
 
 import Logo from "./components/Logo";
+import EventListItem from "./components/EventListItem";
 
 const HomePage = (props) => {
   const { navigate, goBack } = props;
   return (
     <View style={styles.container}>
       <Logo />
+      <EventListItem eventName='Soccer Game' eventTime='5:00'/>
       <Button
         title="Back"
         onPress={() => {

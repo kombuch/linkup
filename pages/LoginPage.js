@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, Text, View, Button } from "react-native";
+import { StyleSheet, TextInput, Text, View, Pressable } from "react-native";
 
 import Logo from "./components/Logo";
 
@@ -6,39 +6,77 @@ const LoginPage = (props) => {
   const { navigate, goBack } = props;
   return (
     <View style={styles.container}>
-      <Logo />
-      <View style={styles.inputContainer}>
-        <Text>Email </Text>
-        <TextInput style={styles.input} />
+      <View style={styles.logoContainer}>
+        <Logo />
       </View>
       <View style={styles.inputContainer}>
-        <Text>Password</Text>
-        <TextInput secureTextEntry style={styles.input} />
+        <TextInput
+          placeholder="Email"
+          placeholderTextColor="#003f5c"
+          style={styles.inputText}
+        />
       </View>
-      <Button title="Login" onPress={() => {navigate("home")}}/>
+      <View style={styles.inputContainer}>
+        <TextInput
+          secureTextEntry
+          placeholder="Password"
+          placeholderTextColor="#003f5c"
+          style={styles.inputText}
+        />
+      </View>
+      <Pressable
+        style={styles.button}
+        onPress={() => {
+          navigate("home");
+        }}
+      >
+        <Text style={styles.text}>Login</Text>
+      </Pressable>
     </View>
   );
-}
+};
 
-export default LoginPage
+export default LoginPage;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#154734",
     alignItems: "center",
-    margin: 100,
+    justifyContent: "center",
     gap: 30,
   },
-  inputContainer: {
-    gap: 5,
-    justifyContent: "flex-start",
+  logoContainer: {
+    backgroundColor: "#154734",
+    marginBottom: 20,
   },
-  input: {
-    borderWidth: 1,
-    borderRadius: 5,
-    height: 30,
-    padding: 10,
-    margin: 10,
-  }
+  inputContainer: {
+    width: "80%",
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    height: 50,
+    marginBottom: 20,
+    justifyContent: "center",
+    padding: 20,
+  },
+  inputText: {
+    height: 50,
+    color: "black",
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "black",
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: "white",
+  },
 });

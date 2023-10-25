@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -10,7 +11,7 @@ import ProfilePage from "./pages/ProfilePage";
 
 const navStack = [];
 
-export default function App() {
+const App = () => {
   const [currentPage, setCurrentPage] = useState("login");
   const navigate = (page) => {
     navStack.push(currentPage);
@@ -48,10 +49,11 @@ export default function App() {
   );
 }
 
+export default App;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
   },
 });

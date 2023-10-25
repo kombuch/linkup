@@ -11,6 +11,7 @@ const JoinEventPage = (props) => {
         title="Back"
         onPress={() => {
           goBack();
+          
         }}
       />
     </View>
