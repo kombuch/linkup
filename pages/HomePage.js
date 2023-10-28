@@ -1,17 +1,10 @@
-import {
-  StyleSheet,
-  TextInput,
-  Text,
-  View,
-  Button,
-  FlatList,
-} from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 
+import BackButton from "./components/BackButton";
 import EventListItem from "./components/EventListItem";
+import HostButton from "./components/HostButton";
 import Logo from "./components/Logo";
 import ProfileButton from "./components/ProfileButton";
-import BackButton from "./components/BackButton";
-import HostButton from "./components/HostButton";
 
 const events = [
   {
@@ -25,7 +18,7 @@ const events = [
     id: "1",
     eventName: "Basketball Game",
     eventTime: "1:25pm",
-    isHosting: false,
+    isHosting: true,
     isAttending: false,
   },
   {
@@ -40,7 +33,7 @@ const events = [
     eventName: "Esports Club",
     eventTime: "7:00pm",
     isHosting: false,
-    isAttending: false,
+    isAttending: true,
   },
 ];
 
@@ -50,7 +43,7 @@ const HomePage = (props) => {
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <Logo />
-        <ProfileButton navigate={navigate}/>
+        <ProfileButton navigate={navigate} />
       </View>
       <View style={styles.listContainer}>
         <FlatList
@@ -61,10 +54,9 @@ const HomePage = (props) => {
         />
       </View>
       <View style={styles.bottomContainer}>
-        <BackButton goBack={goBack}/>
+        <BackButton goBack={goBack} />
         <HostButton navigate={navigate} />
-    </View>
-      
+      </View>
     </View>
   );
 };

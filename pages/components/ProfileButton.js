@@ -1,6 +1,5 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import {ProfileCircle} from 'iconoir-react-native';
-
+import { ProfileCircle } from "iconoir-react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 const ProfileButton = (props) => {
   const { navigate } = props;
@@ -10,7 +9,16 @@ const ProfileButton = (props) => {
         navigate("profile");
       }}
     >
-      <ProfileCircle width='60' height='60'/>
+      <View style={styles.logoBG}>
+        <View style={styles.center}>
+          <ProfileCircle
+            style={styles.logo}
+            color="black"
+            width="60"
+            height="60"
+          />
+        </View>
+      </View>
     </Pressable>
   );
 };
@@ -24,12 +32,23 @@ const styles = StyleSheet.create({
     color: "#000",
     fontFamily: "Gill Sans",
   },
-  logoBG: {
-    borderRadius: 20,
+  center: {
     alignContent: "center",
+    alignSelf: "center",
     justifyContent: "center",
-    width: 150,
+  },
+  logoBG: {
+    borderRadius: 60,
+    alignContent: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    width: 60,
     height: 60,
-    backgroundColor: "#fff",
+    backgroundColor: "#e87500",
+  },
+  logo: {
+    alignContent: "center",
+    alignSelf: "center",
+    justifyContent: "center",
   },
 });
