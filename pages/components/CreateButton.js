@@ -1,34 +1,30 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-const HostButton = (props) => {
-  const { navigate } = props;
+const CreateButton = (props) => {
+  const { onPress } = props;
   return (
-    <Pressable
-      onPress={() => {
-        navigate("host");
-      }}
-    >
+    <Pressable onPress={onPress}>
       <View style={styles.container}>
-        <Text style={styles.text}>+</Text>
+        <Text style={styles.header}>Create</Text>
       </View>
     </Pressable>
   );
 };
 
-export default HostButton;
+export default CreateButton;
 
 const styles = StyleSheet.create({
-  text: {
+  header: {
     fontSize: 40,
     textAlign: "center",
     color: "#fff",
     fontFamily: "Gill Sans",
   },
   container: {
-    borderRadius: 50,
+    borderRadius: 20,
     alignContent: "center",
     justifyContent: "center",
-    width: 60,
+    width: 150,
     height: 60,
     backgroundColor: "#e87500",
   },

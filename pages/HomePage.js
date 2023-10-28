@@ -11,6 +11,7 @@ const events = [
     id: "0",
     eventName: "Soccer Game",
     eventTime: "11:00am",
+    eventLocation: "UTD Soccer Field 1",
     isHosting: false,
     isAttending: false,
   },
@@ -18,6 +19,7 @@ const events = [
     id: "1",
     eventName: "Basketball Game",
     eventTime: "1:25pm",
+    eventLocation: "UTD Basketball Court 1",
     isHosting: true,
     isAttending: false,
   },
@@ -25,6 +27,7 @@ const events = [
     id: "2",
     eventName: "Chess Meetup",
     eventTime: "2:00pm",
+    eventLocation: "ECSS 2.401",
     isHosting: false,
     isAttending: false,
   },
@@ -32,6 +35,7 @@ const events = [
     id: "3",
     eventName: "Esports Club",
     eventTime: "7:00pm",
+    eventLocation: "Esports Room",
     isHosting: false,
     isAttending: true,
   },
@@ -62,6 +66,20 @@ const HomePage = (props) => {
 };
 
 export default HomePage;
+
+export const createEvent = (props) => {
+  const { eventName, eventTime, eventLocation } = props;
+  const id = events.length;
+  events.push({
+    id,
+    eventName,
+    eventTime,
+    eventLocation,
+    isHosting: true,
+    isAttending: false,
+  });
+  console.log(events);
+};
 
 const styles = StyleSheet.create({
   container: {
