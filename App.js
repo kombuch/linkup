@@ -7,6 +7,7 @@ import HostEventPage from "./pages/HostEventPage";
 import JoinEventPage from "./pages/JoinEventPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
+import CreateAccount from "./pages/CreateAccount";
 
 const navStack = [];
 
@@ -49,6 +50,9 @@ const App = () => {
       ) : null}
       {currentPage === "profile" ? (
         <ProfilePage navigate={navigate} goBack={goBack} />
+      ) : null}
+      {currentPage === "createaccount" ? (
+        <CreateAccount navigate={navigate} goBack={goBack} />
       ) : null}
       <StatusBar style="auto" />
     </View>

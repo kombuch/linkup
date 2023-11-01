@@ -6,14 +6,14 @@ import HostButton from "./components/HostButton";
 import Logo from "./components/Logo";
 import ProfileButton from "./components/ProfileButton";
 
-const events = [
+export const events = [
   {
     id: "0",
     eventName: "Soccer Game",
     eventTime: new Date("2023-11-01 11:00"),
     eventLocation: "UTD Soccer Field 1",
     isHosting: false,
-    isAttending: false,
+    isAttending: true,
   },
   {
     id: "1",
@@ -64,6 +64,7 @@ const events = [
     isAttending: false,
   },
 ];
+
 
 const HomePage = (props) => {
   const { navigate, goBack } = props;

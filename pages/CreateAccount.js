@@ -11,6 +11,13 @@ const LoginPage = (props) => {
       </View>
       <View style={styles.inputContainer}>
         <TextInput
+          placeholder="Username"
+          placeholderTextColor="#003f5c"
+          style={styles.inputText}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInput
           placeholder="Email"
           placeholderTextColor="#003f5c"
           style={styles.inputText}
@@ -24,21 +31,13 @@ const LoginPage = (props) => {
           style={styles.inputText}
         />
       </View>
-      <Pressable
-        style={styles.button}
-        onPress={() => {
-          navigate("home");
-        }}
-      >
-        <Text style={styles.text}>Login</Text>
-      </Pressable>
       <Pressable 
         style={styles.button}
         onPress={() => {
-          navigate("createaccount");
+          navigate("login");
         }}
         >
-        <Text style={styles.text}>Create Account</Text>
+        <Text style={styles.text}>Create</Text>
       </Pressable>
     </View>
   );
