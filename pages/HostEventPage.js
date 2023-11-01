@@ -125,7 +125,6 @@ const HostEventPage = (props) => {
             const date = ampmTo24H(eventTime);
             let validInputs = true;
             if (isNaN(date)) {
-              setEventLocation("NaN: " + date);
               setEventTime("");
               setTimeBlinking(true);
               validInputs = false;
@@ -174,13 +173,10 @@ const ampmTo24H = (time) => {
   }
 
   let hoursI = parseInt(hours);
-  const minI = parseInt(minutes);
-  const minS = isNaN(minI)
-    ? "00"
-    : minI.toLocaleString("en-US", {
-        minimumIntegerDigits: 2,
-        useGrouping: false,
-      });
+  let minI = parseInt(minutes);
+  minI = isNaN(minI)
+    ? 0
+    : minI
   console.log(`converted: ${hoursI}:${minI}`);
   if (pm && hoursI < 12) {
     hoursI += 12;
@@ -188,11 +184,11 @@ const ampmTo24H = (time) => {
     hoursI = 0;
   }
   const today = new Date();
-  return new Date(
-    `${today.getFullYear()}-${
-      today.getMonth() + 1
-    }-${today.getDate()} ${hoursI}:${minS}`,
-  );
+  console.log("today: " + today.toUTCString())
+  const eventDate = new Date();
+  eventDate.setHours(hoursI);
+  eventDate.setMinutes(minI);
+  return eventDate;
 };
 
 const styles = StyleSheet.create({

@@ -10,7 +10,7 @@ const events = [
   {
     id: "0",
     eventName: "Soccer Game",
-    eventTime: new Date("2023-10-31 11:00"),
+    eventTime: new Date("2023-11-01 11:00"),
     eventLocation: "UTD Soccer Field 1",
     isHosting: false,
     isAttending: false,
@@ -18,7 +18,7 @@ const events = [
   {
     id: "1",
     eventName: "Basketball Game",
-    eventTime: new Date("2023-10-31 13:25"),
+    eventTime: new Date("2023-11-01 13:25"),
     eventLocation: "UTD Basketball Court 1",
     isHosting: false,
     isAttending: false,
@@ -26,7 +26,7 @@ const events = [
   {
     id: "2",
     eventName: "Chess Meetup",
-    eventTime: new Date("2023-10-31 14:00"),
+    eventTime: new Date("2023-11-01 14:00"),
     eventLocation: "ECSS 2.401",
     isHosting: false,
     isAttending: false,
@@ -34,7 +34,7 @@ const events = [
   {
     id: "3",
     eventName: "Esports Club",
-    eventTime: new Date("2023-10-31 19:00"),
+    eventTime: new Date("2023-11-01 19:00"),
     eventLocation: "Esports Room",
     isHosting: false,
     isAttending: false,
@@ -42,7 +42,7 @@ const events = [
   {
     id: "4",
     eventName: "Dance class",
-    eventTime: new Date("2023-10-31 13:00"),
+    eventTime: new Date("2023-11-01 13:00"),
     eventLocation: "GR 2.101",
     isHosting: false,
     isAttending: false,
@@ -50,7 +50,7 @@ const events = [
   {
     id: "5",
     eventName: "Jogging",
-    eventTime: new Date("2023-10-31 21:00"),
+    eventTime: new Date("2023-11-01 21:00"),
     eventLocation: "Northside Apartments",
     isHosting: false,
     isAttending: false,
@@ -58,7 +58,7 @@ const events = [
   {
     id: "6",
     eventName: "Yoga",
-    eventTime: new Date("2023-10-31 06:00"),
+    eventTime: new Date("2023-11-01 06:00"),
     eventLocation: "Activity Center",
     isHosting: false,
     isAttending: false,
