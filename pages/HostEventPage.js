@@ -124,7 +124,7 @@ const HostEventPage = (props) => {
             //TODO - Input checking
             const date = ampmTo24H(eventTime);
             let validInputs = true;
-            if (isNaN(date)) {
+            if (isNaN(date.getMinutes())) {
               console.log("NaN: " + date);
               setEventTime("");
               setTimeBlinking(true);
