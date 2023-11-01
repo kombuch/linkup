@@ -1,7 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 
 import HomePage from "./pages/HomePage";
 import HostEventPage from "./pages/HostEventPage";
@@ -28,7 +27,12 @@ const App = () => {
     console.log(navStack);
   };
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        ...styles.container,
+        maxHeight: Dimensions.get("window").height,
+      }}
+    >
       {currentPage === "login" ? (
         <LoginPage navigate={navigate} goBack={goBack} />
       ) : null}
@@ -47,7 +51,7 @@ const App = () => {
       <StatusBar style="auto" />
     </View>
   );
-}
+};
 
 export default App;
 
