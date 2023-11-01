@@ -17,6 +17,9 @@ const App = () => {
     setCurrentPage(page);
     console.log(navStack);
   };
+
+  const { height } = Dimensions.get("window");
+
   const goBack = () => {
     if (navStack.length === 0) {
       //do nothing?
@@ -30,7 +33,7 @@ const App = () => {
     <View
       style={{
         ...styles.container,
-        maxHeight: Dimensions.get("window").height,
+        maxHeight: height,
       }}
     >
       {currentPage === "login" ? (
