@@ -33,7 +33,8 @@ const App = () => {
     <View
       style={{
         ...styles.container,
-        height,
+        minHeight: height,
+        maxHeight: height,
       }}
     >
       {currentPage === "login" ? (
