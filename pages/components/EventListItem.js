@@ -43,19 +43,19 @@ export default EventListItem;
 
 const styles = StyleSheet.create({
   eventName: {
-    fontSize: 25,
+    fontSize: 23,
     flex: 2,
     justifyContent: "flex-start",
     color: "#fff",
-    margin: 5,
+    margin: 6,
   },
   eventTime: {
-    fontSize: 25,
+    fontSize: 23,
     flex: 1,
     justifyContent: "flex-end",
     textAlign: "right",
     marginRight: 5,
-    marginTop: 5,
+    marginTop: 6,
     color: "#fff",
   },
   container: {
