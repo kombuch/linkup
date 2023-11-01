@@ -15,7 +15,7 @@ const HostEventPage = (props) => {
     useGrouping: false,
   });
   const ampm = hour24 < 12 ? "am" : "pm";
-  const hours = hour24 < 12 ? hour24 : hour24 - 12;
+  const hours = hour24 < 13 ? hour24 : hour24 - 12;
 
   const [eventName, setEventName] = useState("");
   const [eventTime, setEventTime] = useState(hours + ":" + min + ampm);
@@ -52,7 +52,6 @@ const HostEventPage = (props) => {
       }, 1500);
     }
   }, [timeBlinking]);
-
 
   useEffect(() => {
     if (nameBlinking) {
@@ -126,6 +125,7 @@ const HostEventPage = (props) => {
             const date = ampmTo24H(eventTime);
             let validInputs = true;
             if (isNaN(date)) {
+              console.log("NaN: " + date);
               setEventTime("");
               setTimeBlinking(true);
               validInputs = false;
@@ -133,8 +133,8 @@ const HostEventPage = (props) => {
             if (eventName === "") {
               setNameBlinking(true);
               validInputs = false;
-            } 
-            if(validInputs) {
+            }
+            if (validInputs) {
               console.log("ds: " + date.toDateString());
               createEvent({ eventName, eventTime: date, eventLocation });
               navigate("home");
