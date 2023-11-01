@@ -2,12 +2,18 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const EventListItem = (props) => {
   const { id, eventName, eventTime, isHosting, isAttending, onPress } = props;
+
+  const time = `${eventTime.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  })}`;
+
   if (isHosting) {
     return (
       <Pressable onPress={onPress}>
         <View style={styles.containerHosting}>
           <Text style={styles.eventName}>{eventName}</Text>
-          <Text style={styles.eventTime}>{eventTime}</Text>
+          <Text style={styles.eventTime}>{time}</Text>
         </View>
       </Pressable>
     );
@@ -17,7 +23,7 @@ const EventListItem = (props) => {
       <Pressable onPress={onPress}>
         <View style={styles.containerAttending}>
           <Text style={styles.eventName}>{eventName}</Text>
-          <Text style={styles.eventTime}>{eventTime}</Text>
+          <Text style={styles.eventTime}>{time}</Text>
         </View>
       </Pressable>
     );
@@ -27,7 +33,7 @@ const EventListItem = (props) => {
     <Pressable onPress={onPress}>
       <View style={styles.container}>
         <Text style={styles.eventName}>{eventName}</Text>
-        <Text style={styles.eventTime}>{eventTime}</Text>
+        <Text style={styles.eventTime}>{time}</Text>
       </View>
     </Pressable>
   );
@@ -48,14 +54,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     textAlign: "right",
-    margin: 5,
+    marginRight: 5,
+    marginTop: 5,
     color: "#fff",
   },
   container: {
     flex: 1,
     backgroundColor: "#111",
     flexDirection: "row",
-    width: "80%",
+    width: "85%",
     justifyContent: "center",
     alignSelf: "center",
     height: 40,
@@ -66,7 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "green",
     flexDirection: "row",
-    width: "80%",
+    width: "85%",
     justifyContent: "center",
     alignSelf: "center",
     height: 40,
@@ -77,7 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#e87500",
     flexDirection: "row",
-    width: "80%",
+    width: "85%",
     justifyContent: "center",
     alignSelf: "center",
     height: 40,

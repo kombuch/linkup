@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput } from "react-native";
 
 import { createEvent } from "./HomePage";
@@ -10,7 +10,10 @@ const HostEventPage = (props) => {
 
   const now = new Date();
   const hour24 = now.getHours();
-  const min = now.getMinutes();
+  const min = now.getMinutes().toLocaleString("en-US", {
+    minimumIntegerDigits: 2,
+    useGrouping: false,
+  });
   const ampm = hour24 < 12 ? "am" : "pm";
   const hours = hour24 < 12 ? hour24 : hour24 - 12;
 
@@ -18,6 +21,62 @@ const HostEventPage = (props) => {
   const [eventTime, setEventTime] = useState(hours + ":" + min + ampm);
   const [eventLocation, setEventLocation] = useState("");
 
+  const [invalidTime, setInvalidTime] = useState(false);
+  const [timeBlinking, setTimeBlinking] = useState(false);
+
+  const [invalidName, setInvalidName] = useState(false);
+  const [nameBlinking, setNameBlinking] = useState(false);
+
+  useEffect(() => {
+    if (timeBlinking) {
+      setTimeout(() => {
+        setInvalidTime(true);
+      }, 250);
+      setTimeout(() => {
+        setInvalidTime(false);
+      }, 500);
+      setTimeout(() => {
+        setInvalidTime(true);
+      }, 750);
+      setTimeout(() => {
+        setInvalidTime(false);
+        setTimeBlinking(false);
+      }, 1000);
+      setTimeout(() => {
+        setInvalidTime(true);
+        setTimeBlinking(false);
+      }, 1250);
+      setTimeout(() => {
+        setInvalidTime(false);
+        setTimeBlinking(false);
+      }, 1500);
+    }
+  }, [timeBlinking]);
+
+
+  useEffect(() => {
+    if (nameBlinking) {
+      setTimeout(() => {
+        setInvalidName(true);
+      }, 250);
+      setTimeout(() => {
+        setInvalidName(false);
+      }, 500);
+      setTimeout(() => {
+        setInvalidName(true);
+      }, 750);
+      setTimeout(() => {
+        setInvalidName(false);
+      }, 1000);
+      setTimeout(() => {
+        setInvalidName(true);
+      }, 1250);
+      setTimeout(() => {
+        setInvalidName(false);
+        setNameBlinking(false);
+      }, 1500);
+    }
+  }, [nameBlinking]);
 
   return (
     <View style={styles.container}>
@@ -25,7 +84,11 @@ const HostEventPage = (props) => {
         <Text style={styles.header}>Create Event</Text>
       </View>
       <View style={styles.listContainer}>
-        <Text style={styles.inputLabel}>Event Name</Text>
+        {invalidName ? (
+          <Text style={styles.badInputLabel}>Event Name</Text>
+        ) : (
+          <Text style={styles.inputLabel}>Event Name</Text>
+        )}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputText}
@@ -33,7 +96,11 @@ const HostEventPage = (props) => {
             onChangeText={setEventName}
           />
         </View>
-        <Text style={styles.inputLabel}>Start Time</Text>
+        {invalidTime ? (
+          <Text style={styles.badInputLabel}>Start Time</Text>
+        ) : (
+          <Text style={styles.inputLabel}>Start Time</Text>
+        )}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputText}
@@ -56,8 +123,22 @@ const HostEventPage = (props) => {
         <CreateButton
           onPress={() => {
             //TODO - Input checking
-            createEvent({ eventName, eventTime, eventLocation });
-            navigate("home");
+            const date = ampmTo24H(eventTime);
+            let validInputs = true;
+            if (isNaN(date)) {
+              setEventTime("");
+              setTimeBlinking(true);
+              validInputs = false;
+            }
+            if (eventName === "") {
+              setNameBlinking(true);
+              validInputs = false;
+            } 
+            if(validInputs) {
+              console.log("ds: " + date.toDateString());
+              createEvent({ eventName, eventTime: date, eventLocation });
+              navigate("home");
+            }
           }}
         />
       </View>
@@ -66,6 +147,53 @@ const HostEventPage = (props) => {
 };
 
 export default HostEventPage;
+
+const ampmTo24H = (time) => {
+  let pm = false;
+  let hours = "";
+  let minutes = "";
+  time = time.toLowerCase();
+  let part = 0; // hours = 0, min = 1, am/pm = 2
+  for (let i = 0; i < time.length; i++) {
+    if ((time[i] === ":") | (time[i] === " ")) {
+      part++;
+      continue;
+    }
+    if (time[i] === "p") {
+      pm = true;
+      break;
+    }
+    if (time[i] === "a") {
+      break;
+    }
+    if (part === 0) {
+      hours += time[i];
+    } else {
+      minutes += time[i];
+    }
+  }
+
+  let hoursI = parseInt(hours);
+  const minI = parseInt(minutes);
+  const minS = isNaN(minI)
+    ? "00"
+    : minI.toLocaleString("en-US", {
+        minimumIntegerDigits: 2,
+        useGrouping: false,
+      });
+  console.log(`converted: ${hoursI}:${minI}`);
+  if (pm && hoursI < 12) {
+    hoursI += 12;
+  } else if (!pm && hoursI === 12) {
+    hoursI = 0;
+  }
+  const today = new Date();
+  return new Date(
+    `${today.getFullYear()}-${
+      today.getMonth() + 1
+    }-${today.getDate()} ${hoursI}:${minS}`,
+  );
+};
 
 const styles = StyleSheet.create({
   header: {
@@ -78,6 +206,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "left",
     color: "#fff",
+    fontFamily: "Gill Sans",
+    marginLeft: "14%",
+  },
+  badInputLabel: {
+    fontSize: 20,
+    textAlign: "left",
+    color: "red",
     fontFamily: "Gill Sans",
     marginLeft: "14%",
   },

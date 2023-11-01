@@ -10,7 +10,7 @@ const events = [
   {
     id: "0",
     eventName: "Soccer Game",
-    eventTime: "11:00am",
+    eventTime: new Date("2023-10-31 11:00"),
     eventLocation: "UTD Soccer Field 1",
     isHosting: false,
     isAttending: false,
@@ -18,15 +18,15 @@ const events = [
   {
     id: "1",
     eventName: "Basketball Game",
-    eventTime: "1:25pm",
+    eventTime: new Date("2023-10-31 13:25"),
     eventLocation: "UTD Basketball Court 1",
-    isHosting: true,
+    isHosting: false,
     isAttending: false,
   },
   {
     id: "2",
     eventName: "Chess Meetup",
-    eventTime: "2:00pm",
+    eventTime: new Date("2023-10-31 14:00"),
     eventLocation: "ECSS 2.401",
     isHosting: false,
     isAttending: false,
@@ -34,10 +34,34 @@ const events = [
   {
     id: "3",
     eventName: "Esports Club",
-    eventTime: "7:00pm",
+    eventTime: new Date("2023-10-31 19:00"),
     eventLocation: "Esports Room",
     isHosting: false,
-    isAttending: true,
+    isAttending: false,
+  },
+  {
+    id: "4",
+    eventName: "Dance class",
+    eventTime: new Date("2023-10-31 13:00"),
+    eventLocation: "GR 2.101",
+    isHosting: false,
+    isAttending: false,
+  },
+  {
+    id: "5",
+    eventName: "Jogging",
+    eventTime: new Date("2023-10-31 21:00"),
+    eventLocation: "Northside Apartments",
+    isHosting: false,
+    isAttending: false,
+  },
+  {
+    id: "6",
+    eventName: "Yoga",
+    eventTime: new Date("2023-10-31 06:00"),
+    eventLocation: "Activity Center",
+    isHosting: false,
+    isAttending: false,
   },
 ];
 
@@ -51,7 +75,9 @@ const HomePage = (props) => {
       </View>
       <View style={styles.listContainer}>
         <FlatList
-          data={events}
+          data={events.sort((a, b) => {
+            return a.eventTime - b.eventTime;
+          })}
           renderItem={({ item }) => <EventListItem {...item} />}
           keyExtractor={(item) => item.id}
           style={styles.list}
