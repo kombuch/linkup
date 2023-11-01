@@ -48,14 +48,14 @@ export default EventListItem;
 const styles = StyleSheet.create({
   eventName: {
     fontSize: 23,
-    flex: 2,
+    flex: 3,
     justifyContent: "flex-start",
     color: "#fff",
     margin: 6,
   },
   eventTime: {
     fontSize: 23,
-    flex: 1,
+    flex: 2,
     justifyContent: "flex-end",
     textAlign: "right",
     marginRight: 5,
