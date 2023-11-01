@@ -3,10 +3,14 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 const EventListItem = (props) => {
   const { id, eventName, eventTime, isHosting, isAttending, onPress } = props;
 
-  const time = `${eventTime.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  })}`;
+  const hour24 = eventTime.getHours();
+  const min = eventTime.getMinutes().toLocaleString("en-US", {
+    minimumIntegerDigits: 2,
+    useGrouping: false,
+  });
+  const ampm = hour24 < 12 ? "AM" : "PM";
+  const hours = hour24 < 13 ? hour24 : hour24 - 12;
+  const time = hours + ":" + min + " " + ampm;
 
   if (isHosting) {
     return (
