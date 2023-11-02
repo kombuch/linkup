@@ -15,7 +15,7 @@ function ProfilePage(props) {
       </View>
       <View style={styles.innerContainer}>
         <Text style={styles.welcomeText}>Hello User</Text>
-        <Text style={styles.titleText}>Attending Events</Text>
+        <Text style={styles.titleText}>Attended Events</Text>
         <View style={styles.listContainer}>
           <FlatList
             data={events
