@@ -1,54 +1,50 @@
-import { ProfileCircle } from "iconoir-react-native";
-import { Pressable, StyleSheet, View } from "react-native";
+import { ProfileCircle } from 'iconoir-react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
+import React from 'react'
 
-const ProfileButton = (props) => {
-  const { navigate } = props;
+function ProfileButton(props) {
+  const { navigate } = props
   return (
     <Pressable
       onPress={() => {
-        navigate("profile");
+        navigate('profile')
       }}
     >
       <View style={styles.logoBG}>
         <View style={styles.center}>
-          <ProfileCircle
-            style={styles.logo}
-            color="black"
-            width="60"
-            height="60"
-          />
+          <ProfileCircle style={styles.logo} color="black" width="60" height="60" />
         </View>
       </View>
     </Pressable>
-  );
-};
+  )
+}
 
-export default ProfileButton;
+export default ProfileButton
 
 const styles = StyleSheet.create({
   header: {
     fontSize: 40,
-    textAlign: "center",
-    color: "#000",
-    fontFamily: "Gill Sans",
+    textAlign: 'center',
+    color: '#000',
+    fontFamily: 'Gill Sans',
   },
   center: {
-    alignContent: "center",
-    alignSelf: "center",
-    justifyContent: "center",
+    alignContent: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
   },
   logoBG: {
     borderRadius: 60,
-    alignContent: "center",
-    alignSelf: "center",
-    justifyContent: "center",
+    alignContent: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
     width: 60,
     height: 60,
-    backgroundColor: "#e87500",
+    backgroundColor: '#e87500',
   },
   logo: {
-    alignContent: "center",
-    alignSelf: "center",
-    justifyContent: "center",
+    alignContent: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
   },
-});
+})

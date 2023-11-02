@@ -1,16 +1,17 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import React from 'react'
 
-const EventListItem = (props) => {
-  const { id, eventName, eventTime, isHosting, isAttending, onPress } = props;
+function EventListItem(props) {
+  const { eventName, eventTime, isHosting, isAttending, onPress } = props
 
-  const hour24 = eventTime.getHours();
-  const min = eventTime.getMinutes().toLocaleString("en-US", {
+  const hour24 = eventTime.getHours()
+  const min = eventTime.getMinutes().toLocaleString('en-US', {
     minimumIntegerDigits: 2,
     useGrouping: false,
-  });
-  const ampm = hour24 < 12 ? "AM" : "PM";
-  const hours = hour24 < 13 ? hour24 : hour24 - 12;
-  const time = hours + ":" + min + " " + ampm;
+  })
+  const ampm = hour24 < 12 ? 'AM' : 'PM'
+  const hours = hour24 < 13 ? hour24 : hour24 - 12
+  const time = `${hours}:${min} ${ampm}`
 
   if (isHosting) {
     return (
@@ -20,7 +21,7 @@ const EventListItem = (props) => {
           <Text style={styles.eventTime}>{time}</Text>
         </View>
       </Pressable>
-    );
+    )
   }
   if (isAttending) {
     return (
@@ -30,7 +31,7 @@ const EventListItem = (props) => {
           <Text style={styles.eventTime}>{time}</Text>
         </View>
       </Pressable>
-    );
+    )
   }
 
   return (
@@ -40,59 +41,59 @@ const EventListItem = (props) => {
         <Text style={styles.eventTime}>{time}</Text>
       </View>
     </Pressable>
-  );
-};
+  )
+}
 
-export default EventListItem;
+export default EventListItem
 
 const styles = StyleSheet.create({
   eventName: {
     fontSize: 23,
     flex: 3,
-    justifyContent: "flex-start",
-    color: "#fff",
+    justifyContent: 'flex-start',
+    color: '#fff',
     margin: 6,
   },
   eventTime: {
     fontSize: 23,
     flex: 2,
-    justifyContent: "flex-end",
-    textAlign: "right",
+    justifyContent: 'flex-end',
+    textAlign: 'right',
     marginRight: 5,
     marginTop: 6,
-    color: "#fff",
+    color: '#fff',
   },
   container: {
     flex: 1,
-    backgroundColor: "#111",
-    flexDirection: "row",
-    width: "85%",
-    justifyContent: "center",
-    alignSelf: "center",
+    backgroundColor: '#111',
+    flexDirection: 'row',
+    width: '85%',
+    justifyContent: 'center',
+    alignSelf: 'center',
     height: 40,
     margin: 5,
     borderRadius: 5,
   },
   containerAttending: {
     flex: 1,
-    backgroundColor: "green",
-    flexDirection: "row",
-    width: "85%",
-    justifyContent: "center",
-    alignSelf: "center",
+    backgroundColor: 'green',
+    flexDirection: 'row',
+    width: '85%',
+    justifyContent: 'center',
+    alignSelf: 'center',
     height: 40,
     margin: 5,
     borderRadius: 5,
   },
   containerHosting: {
     flex: 1,
-    backgroundColor: "#e87500",
-    flexDirection: "row",
-    width: "85%",
-    justifyContent: "center",
-    alignSelf: "center",
+    backgroundColor: '#e87500',
+    flexDirection: 'row',
+    width: '85%',
+    justifyContent: 'center',
+    alignSelf: 'center',
     height: 40,
     margin: 5,
     borderRadius: 5,
   },
-});
+})
