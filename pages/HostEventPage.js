@@ -177,8 +177,6 @@ const ampmTo24H = (t) => {
   } else if (!pm && hoursI === 12) {
     hoursI = 0
   }
-  const today = new Date()
-  console.log(`today: ${today.toUTCString()}`)
   const eventDate = new Date()
   eventDate.setHours(hoursI)
   eventDate.setMinutes(minI)

@@ -6,11 +6,20 @@ import HostButton from './components/HostButton'
 import Logo from './components/Logo'
 import ProfileButton from './components/ProfileButton'
 
+const today = new Date()
+const todayString = `${today.getFullYear()}-${today.getMonth() + 1}-${today
+  .getDate()
+  .toLocaleString('en-US', {
+    minimumIntegerDigits: 2,
+    useGrouping: false,
+  })}`
+console.log(`todaystring ${todayString}`)
+
 export const events = [
   {
     id: '0',
     eventName: 'Soccer Game',
-    eventTime: new Date('2023-11-01 11:00'),
+    eventTime: new Date(`${todayString} 11:00`),
     eventLocation: 'UTD Soccer Field 1',
     isHosting: false,
     isAttending: true,
@@ -18,7 +27,7 @@ export const events = [
   {
     id: '1',
     eventName: 'Basketball Game',
-    eventTime: new Date('2023-11-01 13:25'),
+    eventTime: new Date(`${todayString} 13:25`),
     eventLocation: 'UTD Basketball Court 1',
     isHosting: false,
     isAttending: false,
@@ -26,7 +35,7 @@ export const events = [
   {
     id: '2',
     eventName: 'Chess Meetup',
-    eventTime: new Date('2023-11-01 14:00'),
+    eventTime: new Date(`${todayString} 14:00`),
     eventLocation: 'ECSS 2.401',
     isHosting: false,
     isAttending: false,
@@ -34,7 +43,7 @@ export const events = [
   {
     id: '3',
     eventName: 'Esports Club',
-    eventTime: new Date('2023-11-01 19:00'),
+    eventTime: new Date(`${todayString} 19:00`),
     eventLocation: 'Esports Room',
     isHosting: false,
     isAttending: false,
@@ -42,7 +51,7 @@ export const events = [
   {
     id: '4',
     eventName: 'Dance class',
-    eventTime: new Date('2023-11-01 13:00'),
+    eventTime: new Date(`${todayString} 13:00`),
     eventLocation: 'GR 2.101',
     isHosting: false,
     isAttending: false,
@@ -50,7 +59,7 @@ export const events = [
   {
     id: '5',
     eventName: 'Jogging',
-    eventTime: new Date('2023-11-01 21:00'),
+    eventTime: new Date(`${todayString} 21:00`),
     eventLocation: 'Northside Apartments',
     isHosting: false,
     isAttending: false,
@@ -58,12 +67,14 @@ export const events = [
   {
     id: '6',
     eventName: 'Yoga',
-    eventTime: new Date('2023-11-01 06:00'),
+    eventTime: new Date(`${todayString} 06:00`),
     eventLocation: 'Activity Center',
     isHosting: false,
     isAttending: false,
   },
 ]
+
+console.log(`ogdate: ${events[0].eventTime.toISOString()}`)
 
 function HomePage(props) {
   const { navigate } = props
