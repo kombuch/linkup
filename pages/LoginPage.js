@@ -11,8 +11,16 @@ function LoginPage(props) {
   const [password, setPassword] = useState('')
 
   useEffect(() => {
-    getCurrentEmail().then((currentEmail) => setEmail(currentEmail))
-    getCurrentPass().then((currentPass) => setPassword(currentPass))
+    getCurrentEmail().then((currentEmail) => {
+      if (currentEmail !== null) {
+        setEmail(currentEmail)
+      }
+    })
+    getCurrentPass().then((currentPass) => {
+      if (currentPass !== null) {
+        setPassword(currentPass)
+      }
+    })
   }, []) // prevents this code from running on every render
 
   const loginFailAlert = () =>

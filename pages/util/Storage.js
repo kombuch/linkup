@@ -20,7 +20,7 @@ export const getCurrentUsername = async () => {
   } catch (e) {
     // error reading value
   }
-  return 'USER'
+  return null
 }
 
 export const getCurrentEmail = async () => {
@@ -33,7 +33,7 @@ export const getCurrentEmail = async () => {
   } catch (e) {
     // error reading value
   }
-  return 'EMAIL'
+  return null
 }
 
 export const getCurrentPass = async () => {
@@ -50,7 +50,7 @@ export const getCurrentPass = async () => {
   } catch (e) {
     // error reading value
   }
-  return 'PASS'
+  return null
 }
 
 // return true if login is successful
