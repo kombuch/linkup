@@ -5,7 +5,7 @@ function LogoutButton(props) {
   const { navigate } = props
   return (
     <Pressable onPress={() => navigate('login')}>
-      <View style={styles.logoBG}>
+      <View style={styles.container}>
         <Text style={styles.header}>Logout</Text>
       </View>
     </Pressable>
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     color: '#000',
     fontFamily: 'Gill Sans',
   },
-  logoBG: {
+  container: {
     borderRadius: 40,
     alignContent: 'center',
     justifyContent: 'center',

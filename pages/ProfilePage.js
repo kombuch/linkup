@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native'
+import { StyleSheet, Text, View, FlatList } from 'react-native'
 import React, { useState } from 'react'
 
 import { events } from './HomePage'
@@ -41,9 +41,7 @@ function ProfilePage(props) {
         </View>
       </View>
       <View style={styles.bottomContainer}>
-        <Pressable onPress={() => navigate('home')}>
-          <HomeButton />
-        </Pressable>
+        <HomeButton navigate={navigate} />
         <LogoutButton navigate={navigate} />
       </View>
     </View>

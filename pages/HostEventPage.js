@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TextInput } from 'react-native'
 
 import { createEvent } from './HomePage'
-import LogoutButton from './components/LogoutButton'
 import CreateButton from './components/CreateButton'
+import BackButton from './components/BackButton'
 
 function HostEventPage(props) {
-  const { navigate, goBack } = props
+  const { navigate } = props
 
   const now = new Date()
   const hour24 = now.getHours()
@@ -114,7 +114,7 @@ function HostEventPage(props) {
         </View>
       </View>
       <View style={styles.bottomContainer}>
-        <LogoutButton goBack={goBack} />
+        <BackButton navigate={navigate} />
         <CreateButton
           onPress={() => {
             // TODO - Input checking

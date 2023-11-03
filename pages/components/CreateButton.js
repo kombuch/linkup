@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Gill Sans',
   },
   container: {
-    borderRadius: 20,
+    borderRadius: 40,
     alignContent: 'center',
     justifyContent: 'center',
     width: 150,

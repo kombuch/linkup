@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, TextInput, Text, View, Pressable } from 'react-native'
+import { Alert, StyleSheet, TextInput, Text, View, Pressable, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 import Logo from './components/Logo'
@@ -23,10 +23,16 @@ function LoginPage(props) {
     })
   }, []) // prevents this code from running on every render
 
-  const loginFailAlert = () =>
-    Alert.alert('Incorrect login', 'Please try again', [
-      { text: 'OK', onPress: () => console.log('OK Pressed') },
-    ])
+  const loginFailAlert = () => {
+    if (Platform.OS === 'web') {
+      // eslint-disable-next-line no-alert, no-undef
+      alert('Incorrect Login')
+    } else {
+      Alert.alert('Incorrect login', 'Please try again', [
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ])
+    }
+  }
 
   return (
     <View style={styles.container}>

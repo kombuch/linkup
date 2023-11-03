@@ -65,3 +65,10 @@ export const tryLogin = async (email, pass) => {
   }
   return false
 }
+
+// TODO
+export const getEvents = () => {}
+export const addEvent = () => {}
+export const deleteEvent = () => {}
+export const attendEvent = () => {}
+export const rateEvent = () => {}

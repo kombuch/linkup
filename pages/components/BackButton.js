@@ -1,24 +1,24 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-function HomeButton(props) {
+function BackButton(props) {
   const { navigate } = props
   return (
     <Pressable onPress={() => navigate('home')}>
       <View style={styles.logoBG}>
-        <Text style={styles.header}>Home</Text>
+        <Text style={styles.header}>Back</Text>
       </View>
     </Pressable>
   )
 }
 
-export default HomeButton
+export default BackButton
 
 const styles = StyleSheet.create({
   header: {
     fontSize: 40,
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
     fontFamily: 'Gill Sans',
   },
   logoBG: {
@@ -27,6 +27,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 140,
     height: 60,
-    backgroundColor: '#e87500',
+    backgroundColor: '#fff',
   },
 })
