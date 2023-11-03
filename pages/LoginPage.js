@@ -1,17 +1,38 @@
-import { StyleSheet, TextInput, Text, View, Pressable } from 'react-native'
-import React from 'react'
+import { Alert, StyleSheet, TextInput, Text, View, Pressable } from 'react-native'
+import React, { useEffect, useState } from 'react'
 
 import Logo from './components/Logo'
+import { getCurrentEmail, getCurrentPass, tryLogin } from './util/Storage'
 
 function LoginPage(props) {
   const { navigate } = props
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  useEffect(() => {
+    getCurrentEmail().then((currentEmail) => setEmail(currentEmail))
+    getCurrentPass().then((currentPass) => setPassword(currentPass))
+  }, []) // prevents this code from running on every render
+
+  const loginFailAlert = () =>
+    Alert.alert('Incorrect login', 'Please try again', [
+      { text: 'OK', onPress: () => console.log('OK Pressed') },
+    ])
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Logo />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput placeholder="Email" placeholderTextColor="#003f5c" style={styles.inputText} />
+        <TextInput
+          placeholder="Email"
+          placeholderTextColor="#003f5c"
+          style={styles.inputText}
+          value={email}
+          onChangeText={setEmail}
+        />
       </View>
       <View style={styles.inputContainer}>
         <TextInput
@@ -19,12 +40,20 @@ function LoginPage(props) {
           placeholder="Password"
           placeholderTextColor="#003f5c"
           style={styles.inputText}
+          value={password}
+          onChangeText={setPassword}
         />
       </View>
       <Pressable
         style={styles.button}
         onPress={() => {
-          navigate('home')
+          tryLogin(email, password).then((success) => {
+            if (success) {
+              navigate('home')
+            } else {
+              loginFailAlert()
+            }
+          })
         }}
       >
         <Text style={styles.text}>Login</Text>

@@ -1,20 +1,26 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native'
+import React, { useState } from 'react'
 
 import { events } from './HomePage'
-import BackButton from './components/BackButton'
 import EventListItem from './components/EventListItem'
-import Logo from './components/Logo'
+import { getCurrentUsername } from './util/Storage'
+import HomeButton from './components/HomeButton'
+import LogoutButton from './components/LogoutButton'
 
 function ProfilePage(props) {
-  const { goBack } = props
+  const { navigate } = props
+
+  const [user, setUser] = useState('username')
+  getCurrentUsername().then((data) => setUser(data))
+  console.log(`username: ${user}`)
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Logo />
+        <Text style={styles.welcomeText}>{`Hello ${user}!`}</Text>
+        <View style={styles.seperator} />
       </View>
       <View style={styles.innerContainer}>
-        <Text style={styles.welcomeText}>Hello User</Text>
         <Text style={styles.titleText}>Attended Events</Text>
         <View style={styles.listContainer}>
           <FlatList
@@ -35,7 +41,10 @@ function ProfilePage(props) {
         </View>
       </View>
       <View style={styles.bottomContainer}>
-        <BackButton goBack={goBack} />
+        <Pressable onPress={() => navigate('home')}>
+          <HomeButton />
+        </Pressable>
+        <LogoutButton navigate={navigate} />
       </View>
     </View>
   )
@@ -53,12 +62,8 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
     marginTop: 80,
-    marginLeft: 10,
-    marginRight: 10,
-    gap: 50,
+    marginBottom: 20,
   },
   bottomContainer: {
     flex: 1,
@@ -68,11 +73,23 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     marginLeft: 10,
     marginRight: 10,
-    gap: 50,
+    gap: 30,
+  },
+  seperator: {
+    borderRadius: 20,
+    alignSelf: 'center',
+    marginTop: 5,
+    width: '80%',
+    height: 10,
+    backgroundColor: '#e87500',
   },
   listContainer: {
     flex: 10,
     gap: 30,
+    backgroundColor: '#154034',
+    borderRadius: 20,
+    margin: 8,
+    paddingTop: 8,
   },
   inputContainer: {
     gap: 5,
@@ -87,9 +104,9 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     textAlign: 'center',
-    fontSize: 48,
+    fontSize: 45,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginTop: 5,
     letterSpacing: 0.25,
     color: 'white',
   },

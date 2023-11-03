@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import React from 'react'
 
-import BackButton from './components/BackButton'
+import LogoutButton from './components/LogoutButton'
 import Logo from './components/Logo'
 
 function JoinEventPage(props) {
@@ -9,7 +9,7 @@ function JoinEventPage(props) {
   return (
     <View style={styles.container}>
       <Logo />
-      <BackButton goBack={goBack} />
+      <LogoutButton goBack={goBack} />
     </View>
   )
 }

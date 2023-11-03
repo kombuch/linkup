@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TextInput } from 'react-native'
 
 import { createEvent } from './HomePage'
-import BackButton from './components/BackButton'
+import LogoutButton from './components/LogoutButton'
 import CreateButton from './components/CreateButton'
 
 function HostEventPage(props) {
@@ -114,7 +114,7 @@ function HostEventPage(props) {
         </View>
       </View>
       <View style={styles.bottomContainer}>
-        <BackButton goBack={goBack} />
+        <LogoutButton goBack={goBack} />
         <CreateButton
           onPress={() => {
             // TODO - Input checking

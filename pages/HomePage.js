@@ -1,7 +1,6 @@
 import { StyleSheet, View, FlatList } from 'react-native'
 import React from 'react'
 
-import BackButton from './components/BackButton'
 import EventListItem from './components/EventListItem'
 import HostButton from './components/HostButton'
 import Logo from './components/Logo'
@@ -67,7 +66,7 @@ export const events = [
 ]
 
 function HomePage(props) {
-  const { navigate, goBack } = props
+  const { navigate } = props
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -82,7 +81,6 @@ function HomePage(props) {
         />
       </View>
       <View style={styles.bottomContainer}>
-        <BackButton goBack={goBack} />
         <HostButton navigate={navigate} />
       </View>
     </View>
@@ -133,6 +131,10 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 10,
     gap: 30,
+    backgroundColor: '#154034',
+    borderRadius: 20,
+    margin: 8,
+    paddingTop: 8,
   },
   inputContainer: {
     gap: 5,

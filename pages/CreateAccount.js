@@ -1,20 +1,37 @@
 import { StyleSheet, TextInput, Text, View, Pressable } from 'react-native'
-import React from 'react'
-
+import React, { useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Logo from './components/Logo'
 
 function LoginPage(props) {
   const { navigate } = props
+
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Logo />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput placeholder="Username" placeholderTextColor="#003f5c" style={styles.inputText} />
+        <TextInput
+          placeholder="Username"
+          placeholderTextColor="#003f5c"
+          style={styles.inputText}
+          value={username}
+          onChangeText={setUsername}
+        />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput placeholder="Email" placeholderTextColor="#003f5c" style={styles.inputText} />
+        <TextInput
+          placeholder="Email"
+          placeholderTextColor="#003f5c"
+          style={styles.inputText}
+          value={email}
+          onChangeText={setEmail}
+        />
       </View>
       <View style={styles.inputContainer}>
         <TextInput
@@ -22,11 +39,20 @@ function LoginPage(props) {
           placeholder="Password"
           placeholderTextColor="#003f5c"
           style={styles.inputText}
+          value={password}
+          onChangeText={setPassword}
         />
       </View>
       <Pressable
         style={styles.button}
         onPress={() => {
+          try {
+            AsyncStorage.setItem(`${email}:name`, username)
+            AsyncStorage.setItem(email, password)
+            AsyncStorage.setItem('currentUser', email)
+          } catch (e) {
+            console.log('ERROR CREATING ACCOUNT')
+          }
           navigate('login')
         }}
       >
