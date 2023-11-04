@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TextInput } from 'react-native'
 
-import { createEvent } from './HomePage'
 import CreateButton from './components/CreateButton'
 import BackButton from './components/BackButton'
+import { addEvent } from './util/Storage'
 
 function HostEventPage(props) {
   const { navigate } = props
@@ -77,6 +77,12 @@ function HostEventPage(props) {
     }
   }, [nameBlinking])
 
+  const create = (date) => {
+    addEvent(eventName, date, 60, eventLocation).then((success) => {
+      if (success) navigate('home')
+    })
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -131,8 +137,7 @@ function HostEventPage(props) {
             }
             if (validInputs) {
               console.log(`ds: ${date.toDateString()}`)
-              createEvent({ eventName, eventTime: date, eventLocation })
-              navigate('home')
+              create(date)
             }
           }}
         />

@@ -1,10 +1,12 @@
 import { StyleSheet, View, FlatList } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import EventListItem from './components/EventListItem'
 import HostButton from './components/HostButton'
 import Logo from './components/Logo'
 import ProfileButton from './components/ProfileButton'
+import { getEvents } from './util/Storage'
 
 const today = new Date()
 const todayString = `${today.getFullYear()}-${today.getMonth() + 1}-${today
@@ -15,7 +17,7 @@ const todayString = `${today.getFullYear()}-${today.getMonth() + 1}-${today
   })}`
 console.log(`todaystring ${todayString}`)
 
-export const events = [
+export const eventsOld = [
   {
     id: '0',
     eventName: 'Soccer Game',
@@ -74,10 +76,16 @@ export const events = [
   },
 ]
 
-console.log(`ogdate: ${events[0].eventTime.toISOString()}`)
-
 function HomePage(props) {
   const { navigate } = props
+
+  const [events, setEvents] = useState([])
+  useEffect(() => {
+    getEvents().then((stored) => {
+      setEvents(stored)
+    })
+  }, [])
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -99,20 +107,6 @@ function HomePage(props) {
 }
 
 export default HomePage
-
-export const createEvent = (props) => {
-  const { eventName, eventTime, eventLocation } = props
-  const id = events.length
-  events.push({
-    id,
-    eventName,
-    eventTime,
-    eventLocation,
-    isHosting: true,
-    isAttending: false,
-  })
-  console.log(events)
-}
 
 const styles = StyleSheet.create({
   container: {

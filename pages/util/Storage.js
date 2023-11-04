@@ -66,9 +66,88 @@ export const tryLogin = async (email, pass) => {
   return false
 }
 
-// TODO
-export const getEvents = () => {}
-export const addEvent = () => {}
-export const deleteEvent = () => {}
-export const attendEvent = () => {}
-export const rateEvent = () => {}
+// event methods
+export const getEvents = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem('events')
+    console.log(`eventjson: ${jsonValue}`)
+    if (jsonValue != null) {
+      return JSON.parse(jsonValue, (name, value) => {
+        if (
+          typeof value === 'string' &&
+          /^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\dZ$/.test(value)
+        ) {
+          return new Date(value)
+        }
+        return value
+      })
+    }
+    return []
+  } catch (e) {
+    // error reading value
+  }
+  return []
+}
+export const addEvent = async (eventName, eventTime, minuteDuration, eventLocation) => {
+  try {
+    const events = await getEvents()
+    if (events == null) return false
+    events.push({
+      id: events.length,
+      eventName,
+      eventTime,
+      minuteDuration,
+      creationTime: new Date(),
+      eventLocation,
+      usersAttending: [],
+      ratings: {},
+      deleted: false,
+      hostUsername: await getCurrentUsername(),
+    })
+    const jsonValue = JSON.stringify(events)
+    await AsyncStorage.setItem('events', jsonValue)
+    return true
+  } catch (e) {
+    // saving error
+  }
+  return false
+}
+export const deleteEvent = async (eventId) => {
+  try {
+    const events = await getEvents()
+    if (events == null) return false
+    events[eventId].deleted = true
+    const jsonValue = JSON.stringify(events)
+    await AsyncStorage.setItem('events', jsonValue)
+    return true
+  } catch (e) {
+    // saving error
+  }
+  return false
+}
+export const attendEvent = async (eventId) => {
+  try {
+    const events = await getEvents()
+    if (events == null) return false
+    events[eventId].usersAttending.push(await getCurrentUsername())
+    const jsonValue = JSON.stringify(events)
+    await AsyncStorage.setItem('events', jsonValue)
+    return true
+  } catch (e) {
+    // saving error
+  }
+  return false
+}
+export const rateEvent = async (eventId, fiveScore) => {
+  try {
+    const events = await getEvents()
+    if (events == null) return false
+    events[eventId].ratings[await getCurrentUsername()] = fiveScore
+    const jsonValue = JSON.stringify(events)
+    await AsyncStorage.setItem('events', jsonValue)
+    return true
+  } catch (e) {
+    // saving error
+  }
+  return false
+}

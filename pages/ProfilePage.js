@@ -1,9 +1,8 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { events } from './HomePage'
 import EventListItem from './components/EventListItem'
-import { getCurrentUsername } from './util/Storage'
+import { getCurrentUsername, getEvents } from './util/Storage'
 import HomeButton from './components/HomeButton'
 import LogoutButton from './components/LogoutButton'
 
@@ -11,8 +10,17 @@ function ProfilePage(props) {
   const { navigate } = props
 
   const [user, setUser] = useState('username')
-  getCurrentUsername().then((data) => setUser(data))
   console.log(`username: ${user}`)
+
+  const [events, setEvents] = useState([])
+  useEffect(() => {
+    getEvents().then((stored) => {
+      setEvents(stored)
+      console.log(`events: ${stored}`)
+    })
+
+    getCurrentUsername().then((data) => setUser(data))
+  }, [])
 
   return (
     <View style={styles.container}>
