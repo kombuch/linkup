@@ -9,14 +9,12 @@ import LogoutButton from './components/LogoutButton'
 function ProfilePage(props) {
   const { navigate } = props
 
-  const [user, setUser] = useState('username')
-  console.log(`username: ${user}`)
+  const [user, setUser] = useState(null)
 
   const [events, setEvents] = useState([])
   useEffect(() => {
     getEvents().then((stored) => {
       setEvents(stored)
-      console.log(`events: ${stored}`)
     })
 
     getCurrentUsername().then((data) => setUser(data))
@@ -25,7 +23,7 @@ function ProfilePage(props) {
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Text style={styles.welcomeText}>{`Hello ${user}!`}</Text>
+        {user != null && <Text style={styles.welcomeText}>{`Hello ${user}!`}</Text>}
         <View style={styles.seperator} />
       </View>
       <View style={styles.innerContainer}>
@@ -34,16 +32,18 @@ function ProfilePage(props) {
           <FlatList
             data={events
               .sort((a, b) => a.eventTime - b.eventTime)
-              .filter((item) => item.isAttending)}
-            renderItem={({ item }) => <EventListItem {...item} />}
+              .filter((item) => item.usersAttending.includes(user))}
+            renderItem={({ item }) => <EventListItem {...item} currentUser={user} />}
             keyExtractor={(item) => item.id}
           />
         </View>
         <Text style={styles.titleText}>Created Events</Text>
         <View style={styles.listContainer}>
           <FlatList
-            data={events.sort((a, b) => a.eventTime - b.eventTime).filter((item) => item.isHosting)}
-            renderItem={({ item }) => <EventListItem {...item} />}
+            data={events
+              .sort((a, b) => a.eventTime - b.eventTime)
+              .filter((item) => item.hostUsername === user)}
+            renderItem={({ item }) => <EventListItem {...item} currentUser={user} />}
             keyExtractor={(item) => item.id}
           />
         </View>
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    marginTop: 80,
+    marginTop: 50,
     marginBottom: 20,
   },
   bottomContainer: {

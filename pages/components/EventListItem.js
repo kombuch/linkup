@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
 function EventListItem(props) {
-  const { eventName, eventTime, isHosting, isAttending, onPress } = props
+  const { currentUser, eventName, eventTime, hostUsername, usersAttending, onPress } = props
 
   const hour24 = eventTime.getHours()
   const min = eventTime.getMinutes().toLocaleString('en-US', {
@@ -13,7 +13,7 @@ function EventListItem(props) {
   const hours = hour24 < 13 ? hour24 : hour24 - 12
   const time = `${hours}:${min} ${ampm}`
 
-  if (isHosting) {
+  if (hostUsername === currentUser) {
     return (
       <Pressable onPress={onPress}>
         <View style={styles.containerHosting}>
@@ -23,7 +23,7 @@ function EventListItem(props) {
       </Pressable>
     )
   }
-  if (isAttending) {
+  if (usersAttending.includes(currentUser)) {
     return (
       <Pressable onPress={onPress}>
         <View style={styles.containerAttending}>

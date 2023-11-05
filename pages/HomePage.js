@@ -1,90 +1,31 @@
-import { StyleSheet, View, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList, Modal, Text, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import EventListItem from './components/EventListItem'
 import HostButton from './components/HostButton'
 import Logo from './components/Logo'
 import ProfileButton from './components/ProfileButton'
-import { getEvents } from './util/Storage'
-
-const today = new Date()
-const todayString = `${today.getFullYear()}-${today.getMonth() + 1}-${today
-  .getDate()
-  .toLocaleString('en-US', {
-    minimumIntegerDigits: 2,
-    useGrouping: false,
-  })}`
-console.log(`todaystring ${todayString}`)
-
-export const eventsOld = [
-  {
-    id: '0',
-    eventName: 'Soccer Game',
-    eventTime: new Date(`${todayString} 11:00`),
-    eventLocation: 'UTD Soccer Field 1',
-    isHosting: false,
-    isAttending: true,
-  },
-  {
-    id: '1',
-    eventName: 'Basketball Game',
-    eventTime: new Date(`${todayString} 13:25`),
-    eventLocation: 'UTD Basketball Court 1',
-    isHosting: false,
-    isAttending: false,
-  },
-  {
-    id: '2',
-    eventName: 'Chess Meetup',
-    eventTime: new Date(`${todayString} 14:00`),
-    eventLocation: 'ECSS 2.401',
-    isHosting: false,
-    isAttending: false,
-  },
-  {
-    id: '3',
-    eventName: 'Esports Club',
-    eventTime: new Date(`${todayString} 19:00`),
-    eventLocation: 'Esports Room',
-    isHosting: false,
-    isAttending: false,
-  },
-  {
-    id: '4',
-    eventName: 'Dance class',
-    eventTime: new Date(`${todayString} 13:00`),
-    eventLocation: 'GR 2.101',
-    isHosting: false,
-    isAttending: false,
-  },
-  {
-    id: '5',
-    eventName: 'Jogging',
-    eventTime: new Date(`${todayString} 21:00`),
-    eventLocation: 'Northside Apartments',
-    isHosting: false,
-    isAttending: false,
-  },
-  {
-    id: '6',
-    eventName: 'Yoga',
-    eventTime: new Date(`${todayString} 06:00`),
-    eventLocation: 'Activity Center',
-    isHosting: false,
-    isAttending: false,
-  },
-]
+import { getCurrentUsername, getEvents } from './util/Storage'
 
 function HomePage(props) {
   const { navigate } = props
+
+  const [user, setUser] = useState('username')
+  console.log(`username: ${user}`)
 
   const [events, setEvents] = useState([])
   useEffect(() => {
     getEvents().then((stored) => {
       setEvents(stored)
+      console.log(`events: ${stored}`)
     })
+
+    getCurrentUsername().then((data) => setUser(data))
   }, [])
+
+  const currentTime = new Date()
+
+  const [modalVisible, setModalVisible] = useState(false)
 
   return (
     <View style={styles.container}>
@@ -92,10 +33,35 @@ function HomePage(props) {
         <Logo />
         <ProfileButton navigate={navigate} />
       </View>
+      <Modal
+        animationType="slide"
+        transparent
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.')
+          setModalVisible(!modalVisible)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Hello World!</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.listContainer}>
         <FlatList
-          data={events.sort((a, b) => a.eventTime - b.eventTime)}
-          renderItem={({ item }) => <EventListItem {...item} />}
+          data={events
+            // .filter((item) => item.eventTime > currentTime) // filter out past events
+            .sort((a, b) => a.eventTime - b.eventTime)}
+          renderItem={({ item }) => (
+            <EventListItem {...item} currentUser={user} onPress={() => setModalVisible(true)} />
+          )}
           keyExtractor={(item) => item.id}
         />
       </View>
@@ -109,6 +75,43 @@ function HomePage(props) {
 export default HomePage
 
 const styles = StyleSheet.create({
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: '#154734',
@@ -118,7 +121,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'row',
-    marginTop: 80,
+    marginTop: 50,
     marginLeft: 10,
     marginRight: 10,
     gap: 50,
