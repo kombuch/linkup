@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    marginTop: 50,
+    marginTop: 40,
     marginBottom: 20,
   },
   bottomContainer: {

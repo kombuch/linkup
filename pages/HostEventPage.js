@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     marginBottom: 20,
-    marginTop: 50,
+    marginTop: 40,
     marginLeft: 10,
     marginRight: 10,
   },
