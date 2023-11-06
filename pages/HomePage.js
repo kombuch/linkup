@@ -5,13 +5,12 @@ import EventListItem from './components/EventListItem'
 import HostButton from './components/HostButton'
 import Logo from './components/Logo'
 import ProfileButton from './components/ProfileButton'
-import { getCurrentUsername, getEvents } from './util/Storage'
+import { attendEvent, getCurrentUsername, getEvents } from './util/Storage'
 
 function HomePage(props) {
   const { navigate } = props
 
   const [user, setUser] = useState('username')
-  console.log(`username: ${user}`)
 
   const [events, setEvents] = useState([])
   useEffect(() => {
@@ -20,12 +19,45 @@ function HomePage(props) {
       console.log(`events: ${stored}`)
     })
 
+    console.log(`username: ${user}`)
     getCurrentUsername().then((data) => setUser(data))
   }, [])
+  const updateEventListing = () => {
+    getEvents().then((stored) => {
+      setEvents(stored)
+      console.log(`updatedEvents: ${stored}`)
+    })
+  }
 
   const currentTime = new Date()
 
   const [modalVisible, setModalVisible] = useState(false)
+  const [modalEvent, setModalEvent] = useState(-1)
+  const [modalEventName, setModalEventName] = useState('')
+  const [modalEventTime, setModalEventTime] = useState(new Date())
+  const [modalEventHosting, setModalEventHosting] = useState(false)
+  const [modalEventAttending, setModalEventAttending] = useState(false)
+  const [modalEventHostUsername, setModalEventHostUsername] = useState('')
+  const [modalEventAttendance, setModalEventAttendance] = useState(0)
+
+  const openEvent = (
+    eventId,
+    eventName,
+    eventTime,
+    hostUsername,
+    usersAttending,
+    isHosting = false,
+    isAttending = false
+  ) => {
+    setModalEvent(eventId)
+    setModalEventName(eventName)
+    setModalEventTime(eventTime)
+    setModalEventHostUsername(hostUsername)
+    setModalEventHosting(isHosting)
+    setModalEventAttending(isAttending)
+    setModalEventAttendance(usersAttending.length)
+    setModalVisible(true)
+  }
 
   return (
     <View style={styles.container}>
@@ -34,23 +66,42 @@ function HomePage(props) {
         <ProfileButton navigate={navigate} />
       </View>
       <Modal
-        animationType="slide"
+        animationType="none"
         transparent
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.')
           setModalVisible(!modalVisible)
         }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
+            <Text style={styles.modalText}>{modalEventName}</Text>
+            <Text style={styles.modalText}>
+              {modalEventTime.toLocaleString([], { hour: '2-digit', minute: '2-digit' })}
+            </Text>
+            <Text style={styles.modalText}>{`Hosted by ${modalEventHostUsername}`}</Text>
+            <Text style={styles.modalText}>{`${modalEventAttendance} Attending`}</Text>
+            <View style={styles.modalButtonContainer}>
+              {!modalEventAttending && (
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    setModalEventAttending(true)
+                    attendEvent(modalEvent).then(() => updateEventListing())
+                    setModalEventAttendance(modalEventAttendance + 1)
+                    console.log(`event num: ${modalEvent}`)
+                  }}
+                >
+                  <Text style={styles.textStyle}>Attend</Text>
+                </Pressable>
+              )}
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Close</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </Modal>
@@ -60,7 +111,7 @@ function HomePage(props) {
             // .filter((item) => item.eventTime > currentTime) // filter out past events
             .sort((a, b) => a.eventTime - b.eventTime)}
           renderItem={({ item }) => (
-            <EventListItem {...item} currentUser={user} onPress={() => setModalVisible(true)} />
+            <EventListItem {...item} currentUser={user} onPress={openEvent} />
           )}
           keyExtractor={(item) => item.id}
         />
@@ -77,9 +128,11 @@ export default HomePage
 const styles = StyleSheet.create({
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
+    backgroundColor: '#fff',
+    borderColor: 'orange',
+    borderWidth: 2,
+    borderRadius: 10,
+    padding: 55,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -102,11 +155,12 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
   },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
+  modalButtonContainer: {
+    gap: 20,
+    flexDirection: 'row',
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: 'orange',
   },
   modalText: {
     marginBottom: 15,

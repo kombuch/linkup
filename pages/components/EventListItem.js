@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
 function EventListItem(props) {
-  const { currentUser, eventName, eventTime, hostUsername, usersAttending, onPress } = props
+  const { id, currentUser, eventName, eventTime, hostUsername, usersAttending, onPress } = props
 
   const hour24 = eventTime.getHours()
   const min = eventTime.getMinutes().toLocaleString('en-US', {
@@ -13,9 +13,16 @@ function EventListItem(props) {
   const hours = hour24 < 13 ? hour24 : hour24 - 12
   const time = `${hours}:${min} ${ampm}`
 
-  if (hostUsername === currentUser) {
+  const attending = usersAttending.includes(currentUser)
+  const hosting = hostUsername === currentUser
+
+  if (hosting) {
     return (
-      <Pressable onPress={onPress}>
+      <Pressable
+        onPress={() =>
+          onPress(id, eventName, eventTime, hostUsername, usersAttending, hosting, attending)
+        }
+      >
         <View style={styles.containerHosting}>
           <Text style={styles.eventName}>{eventName}</Text>
           <Text style={styles.eventTime}>{time}</Text>
@@ -23,9 +30,13 @@ function EventListItem(props) {
       </Pressable>
     )
   }
-  if (usersAttending.includes(currentUser)) {
+  if (attending) {
     return (
-      <Pressable onPress={onPress}>
+      <Pressable
+        onPress={() =>
+          onPress(id, eventName, eventTime, hostUsername, usersAttending, hosting, attending)
+        }
+      >
         <View style={styles.containerAttending}>
           <Text style={styles.eventName}>{eventName}</Text>
           <Text style={styles.eventTime}>{time}</Text>
@@ -35,7 +46,7 @@ function EventListItem(props) {
   }
 
   return (
-    <Pressable onPress={onPress}>
+    <Pressable onPress={() => onPress(id, eventName, eventTime, hostUsername, usersAttending)}>
       <View style={styles.container}>
         <Text style={styles.eventName}>{eventName}</Text>
         <Text style={styles.eventTime}>{time}</Text>

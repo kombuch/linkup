@@ -58,6 +58,7 @@ export const tryLogin = async (email, pass) => {
   try {
     const realPass = await AsyncStorage.getItem(email)
     if (email !== null && realPass === pass) {
+      AsyncStorage.setItem('currentUser', email)
       return true
     }
   } catch (e) {
