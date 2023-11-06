@@ -32,7 +32,7 @@ function ProfilePage(props) {
           <FlatList
             data={events
               .sort((a, b) => a.eventTime - b.eventTime)
-              .filter((item) => item.usersAttending.includes(user))}
+              .filter((item) => item.hostUsername !== user && item.usersAttending.includes(user))}
             renderItem={({ item }) => <EventListItem {...item} currentUser={user} />}
             keyExtractor={(item) => item.id}
           />
