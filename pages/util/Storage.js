@@ -93,6 +93,7 @@ export const addEvent = async (eventName, eventTime, minuteDuration, eventLocati
   try {
     const events = await getEvents()
     if (events == null) return false
+    const hostName = await getCurrentUsername()
     events.push({
       id: events.length,
       eventName,
@@ -100,10 +101,10 @@ export const addEvent = async (eventName, eventTime, minuteDuration, eventLocati
       minuteDuration,
       creationTime: new Date(),
       eventLocation,
-      usersAttending: [],
+      usersAttending: [hostName],
       ratings: {},
       deleted: false,
-      hostUsername: await getCurrentUsername(),
+      hostUsername: hostName,
     })
     const jsonValue = JSON.stringify(events)
     await AsyncStorage.setItem('events', jsonValue)
