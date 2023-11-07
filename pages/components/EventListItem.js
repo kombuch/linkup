@@ -1,17 +1,20 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { convertTime } from '../util/Time'
 
 function EventListItem(props) {
-  const { id, currentUser, eventName, eventTime, hostUsername, usersAttending, onPress } = props
+  const {
+    id,
+    currentUser,
+    eventName,
+    eventTime,
+    eventLocation,
+    hostUsername,
+    usersAttending,
+    onPress,
+  } = props
 
-  const hour24 = eventTime.getHours()
-  const min = eventTime.getMinutes().toLocaleString('en-US', {
-    minimumIntegerDigits: 2,
-    useGrouping: false,
-  })
-  const ampm = hour24 < 12 ? 'AM' : 'PM'
-  const hours = hour24 < 13 ? hour24 : hour24 - 12
-  const time = `${hours}:${min} ${ampm}`
+  const time = convertTime(eventTime)
 
   const attending = usersAttending.includes(currentUser)
   const hosting = hostUsername === currentUser
@@ -20,7 +23,16 @@ function EventListItem(props) {
     return (
       <Pressable
         onPress={() =>
-          onPress(id, eventName, eventTime, hostUsername, usersAttending, hosting, attending)
+          onPress(
+            id,
+            eventName,
+            eventTime,
+            eventLocation,
+            hostUsername,
+            usersAttending,
+            hosting,
+            attending
+          )
         }
       >
         <View style={styles.containerHosting}>
@@ -34,7 +46,16 @@ function EventListItem(props) {
     return (
       <Pressable
         onPress={() =>
-          onPress(id, eventName, eventTime, hostUsername, usersAttending, hosting, attending)
+          onPress(
+            id,
+            eventName,
+            eventTime,
+            eventLocation,
+            hostUsername,
+            usersAttending,
+            hosting,
+            attending
+          )
         }
       >
         <View style={styles.containerAttending}>
@@ -46,7 +67,9 @@ function EventListItem(props) {
   }
 
   return (
-    <Pressable onPress={() => onPress(id, eventName, eventTime, hostUsername, usersAttending)}>
+    <Pressable
+      onPress={() => onPress(id, eventName, eventTime, eventLocation, hostUsername, usersAttending)}
+    >
       <View style={styles.container}>
         <Text style={styles.eventName}>{eventName}</Text>
         <Text style={styles.eventTime}>{time}</Text>
