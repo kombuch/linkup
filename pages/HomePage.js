@@ -15,7 +15,13 @@ import EventListItem from './components/EventListItem'
 import HostButton from './components/HostButton'
 import Logo from './components/Logo'
 import ProfileButton from './components/ProfileButton'
-import { attendEvent, getCurrentUsername, getEvents, rateEvent } from './util/Storage'
+import {
+  attendEvent,
+  getCurrentUsername,
+  getEvents,
+  getUserRatingText,
+  rateEvent,
+} from './util/Storage'
 import { addMinutes, convertTime } from './util/Time'
 
 function HomePage(props) {
@@ -57,6 +63,7 @@ function HomePage(props) {
   const [modalEventAttending, setModalEventAttending] = useState(false)
   const [modalEventRateable, setModalEventRateable] = useState(false)
   const [modalEventAttendance, setModalEventAttendance] = useState(0)
+  const [modalUserRating, setModalUserRating] = useState('')
   const [rating, setRating] = useState(0)
 
   const openEvent = (event, isHosting = false, isAttending = false) => {
@@ -70,28 +77,14 @@ function HomePage(props) {
     setModalEventEndTime(addMinutes(event.eventTime, event.minuteDuration))
     setModalVisible(true)
   }
-  useEffect(() => {
-    setModalEventRateable(!modalEventHosting && modalEventAttending)
-  }, [modalVisible])
 
-  const getUserRating = (userName) => {
-    let total = 0
-    let count = 0
-    events.forEach((event) => {
-      if (event.hostUsername === userName) {
-        const keys = Object.keys(event.ratings)
-        keys.forEach((key) => {
-          count += 1
-          total += event.ratings[key]
-          console.log(
-            `${event.eventName} hosted by ${event.hostUsername} rated: ${event.ratings[key]} by ${key}`
-          )
-        })
-      }
-    })
-    if (count === 0) return 'no ratings yet'
-    return `${Math.round((total / count) * 10) / 10} / 5`
-  }
+  useEffect(() => {
+    if (modalEvent != null) {
+      getUserRatingText(modalEvent.hostUsername).then((text) => {
+        setModalUserRating(text)
+      })
+    }
+  }, [modalEvent])
 
   return (
     <View style={styles.container}>
@@ -124,15 +117,17 @@ function HomePage(props) {
                     modalEvent.eventTime
                   )} - ${convertTime(modalEventEndTime)} at ${modalEvent.eventLocation}`}</Text>
                   <Text style={styles.modalText}>{`Hosted by ${modalEvent.hostUsername}`}</Text>
-                  <Text style={styles.modalText}>{`Host rating: ${getUserRating(
-                    modalEvent.hostUsername
-                  )}`}</Text>
+                  <Text style={styles.modalText}>{`Host rating: ${modalUserRating}`}</Text>
                   <Text style={styles.modalText}>{`${modalEventAttendance} Attending`}</Text>
                   {modalEventRateable && (
                     <StarRating
                       rating={rating}
                       onChange={(number) => {
-                        rateEvent(modalEvent.id, number).then(() => updateEventListing())
+                        rateEvent(modalEvent.id, number).then(() =>
+                          getUserRatingText(modalEvent.hostUsername).then((text) => {
+                            setModalUserRating(text)
+                          })
+                        )
                         setRating(number)
                       }}
                     />

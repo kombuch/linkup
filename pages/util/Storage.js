@@ -93,7 +93,7 @@ export const addEvent = async (eventName, eventTime, minuteDuration, eventLocati
   try {
     const events = await getEvents()
     if (events == null) return false
-    const hostName = await getCurrentUsername()
+    const hostUsername = await getCurrentUsername()
     events.push({
       id: events.length,
       eventName,
@@ -101,10 +101,10 @@ export const addEvent = async (eventName, eventTime, minuteDuration, eventLocati
       minuteDuration,
       creationTime: new Date(),
       eventLocation,
-      usersAttending: [hostName],
+      usersAttending: [hostUsername],
       ratings: {},
       deleted: false,
-      hostUsername: hostName,
+      hostUsername,
     })
     const jsonValue = JSON.stringify(events)
     await AsyncStorage.setItem('events', jsonValue)
@@ -152,4 +152,46 @@ export const rateEvent = async (eventId, fiveScore) => {
     // saving error
   }
   return false
+}
+
+const updateUserRating = async (username) => {
+  try {
+    const events = await getEvents()
+    let total = 0
+    let count = 0
+    events.forEach((event) => {
+      if (event.hostUsername === username) {
+        const keys = Object.keys(event.ratings)
+        keys.forEach((key) => {
+          count += 1
+          total += event.ratings[key]
+          console.log(
+            `${event.eventName} hosted by ${event.hostUsername} rated: ${event.ratings[key]} by ${key}`
+          )
+        })
+      }
+    })
+    const key = `rating:${username}`
+    if (count === 0) {
+      await AsyncStorage.setItem(key, 'no ratings yet')
+    } else {
+      await AsyncStorage.setItem(key, `${Math.round((total / count) * 10) / 10} / 5`)
+    }
+  } catch (e) {
+    // saving error
+  }
+}
+
+export const getUserRatingText = async (username) => {
+  try {
+    await updateUserRating(username)
+    const key = `rating:${username}`
+    const ratingText = await AsyncStorage.getItem(key)
+    if (ratingText !== null) {
+      return ratingText
+    }
+  } catch (e) {
+    // error reading value
+  }
+  return 'no ratings yet'
 }
