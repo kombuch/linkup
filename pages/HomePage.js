@@ -16,7 +16,7 @@ import HostButton from './components/HostButton'
 import Logo from './components/Logo'
 import ProfileButton from './components/ProfileButton'
 import { attendEvent, getCurrentUsername, getEvents, rateEvent } from './util/Storage'
-import { convertTime } from './util/Time'
+import { addMinutes, convertTime } from './util/Time'
 
 function HomePage(props) {
   const { navigate } = props
@@ -49,8 +49,6 @@ function HomePage(props) {
 
     return () => clearInterval(interval)
   }, [])
-
-  const addMinutes = (date, minutes) => new Date(date.getTime() + parseInt(minutes, 10) * 60000)
 
   const [modalVisible, setModalVisible] = useState(false)
   const [modalEvent, setModalEvent] = useState()
