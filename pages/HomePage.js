@@ -40,8 +40,21 @@ function HomePage(props) {
     })
   }
 
+  const [now, setNow] = useState(new Date())
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(new Date())
+    }, 60000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const addMinutes = (date, minutes) => new Date(date.getTime() + parseInt(minutes, 10) * 60000)
+
   const [modalVisible, setModalVisible] = useState(false)
   const [modalEvent, setModalEvent] = useState()
+  const [modalEventEndTime, setModalEventEndTime] = useState()
   const [modalEventHosting, setModalEventHosting] = useState(false)
   const [modalEventAttending, setModalEventAttending] = useState(false)
   const [modalEventRateable, setModalEventRateable] = useState(false)
@@ -56,6 +69,7 @@ function HomePage(props) {
     setModalEventRateable(!isHosting && isAttending)
     console.log(`${event.eventName} rating: ${events[event.id].ratings[user]}`)
     setRating(events[event.id].ratings[user])
+    setModalEventEndTime(addMinutes(event.eventTime, event.minuteDuration))
     setModalVisible(true)
   }
   useEffect(() => {
@@ -108,9 +122,9 @@ function HomePage(props) {
                 {/* prevents from closing when clicking inside modal */}
                 <View style={styles.modalView}>
                   <Text style={styles.modalTitleText}>{modalEvent.eventName}</Text>
-                  <Text style={styles.modalText}>{`${convertTime(modalEvent.eventTime)} at ${
-                    modalEvent.eventLocation
-                  }`}</Text>
+                  <Text style={styles.modalText}>{`${convertTime(
+                    modalEvent.eventTime
+                  )} - ${convertTime(modalEventEndTime)} at ${modalEvent.eventLocation}`}</Text>
                   <Text style={styles.modalText}>{`Hosted by ${modalEvent.hostUsername}`}</Text>
                   <Text style={styles.modalText}>{`Host rating: ${getUserRating(
                     modalEvent.hostUsername
@@ -155,12 +169,13 @@ function HomePage(props) {
       <View style={styles.listContainer}>
         <FlatList
           data={events
-            // .filter((item) => item.eventTime > currentTime) // filter out past events
+            .filter((item) => addMinutes(item.eventTime, item.minuteDuration) > now) // filter out past events
             .sort((a, b) => a.eventTime - b.eventTime)}
           renderItem={({ item }) => (
             <EventListItem {...item} currentUser={user} onPress={openEvent} />
           )}
           keyExtractor={(item) => item.id}
+          initialNumToRender={20}
         />
       </View>
       <View style={styles.bottomContainer}>

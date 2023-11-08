@@ -19,6 +19,7 @@ function HostEventPage(props) {
 
   const [eventName, setEventName] = useState('')
   const [eventTime, setEventTime] = useState(`${hours}:${min}${ampm}`)
+  const [duration, setDuration] = useState('60')
   const [eventLocation, setEventLocation] = useState('')
 
   const [invalidTime, setInvalidTime] = useState(false)
@@ -26,6 +27,9 @@ function HostEventPage(props) {
 
   const [invalidName, setInvalidName] = useState(false)
   const [nameBlinking, setNameBlinking] = useState(false)
+
+  const [invalidDuration, setInvalidDuration] = useState(false)
+  const [durationBlinking, setDurationBlinking] = useState(false)
 
   useEffect(() => {
     if (timeBlinking) {
@@ -77,8 +81,34 @@ function HostEventPage(props) {
     }
   }, [nameBlinking])
 
+  useEffect(() => {
+    if (durationBlinking) {
+      setTimeout(() => {
+        setInvalidDuration(true)
+      }, 250)
+      setTimeout(() => {
+        setInvalidDuration(false)
+      }, 500)
+      setTimeout(() => {
+        setInvalidDuration(true)
+      }, 750)
+      setTimeout(() => {
+        setInvalidDuration(false)
+      }, 1000)
+      setTimeout(() => {
+        setInvalidDuration(true)
+      }, 1250)
+      setTimeout(() => {
+        setInvalidDuration(false)
+        setDurationBlinking(false)
+      }, 1500)
+    }
+  }, [durationBlinking])
+
   const create = (date) => {
-    addEvent(eventName, date, 60, eventLocation).then((success) => {
+    const durationInt = parseInt(duration, 10)
+    console.log(`duration int: ${durationInt}`)
+    addEvent(eventName, date, durationInt, eventLocation).then((success) => {
       if (success) navigate('home')
     })
   }
@@ -110,6 +140,19 @@ function HostEventPage(props) {
             placeholder="ex: 5:20pm"
           />
         </View>
+        {invalidDuration ? (
+          <Text style={styles.badInputLabel}>Duration (Minutes)</Text>
+        ) : (
+          <Text style={styles.inputLabel}>Duration (Minutes)</Text>
+        )}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.inputText}
+            value={duration}
+            onChangeText={setDuration}
+            placeholder="ex: 60"
+          />
+        </View>
         <Text style={styles.inputLabel}>Location</Text>
         <View style={styles.inputContainer}>
           <TextInput
@@ -134,6 +177,13 @@ function HostEventPage(props) {
             if (eventName === '') {
               setNameBlinking(true)
               validInputs = false
+            }
+            if (Number.isNaN(parseInt(duration, 10))) {
+              setDuration('')
+              setDurationBlinking(true)
+              validInputs = false
+            } else {
+              console.log(`duration: ${duration}`)
             }
             if (validInputs) {
               console.log(`ds: ${date.toDateString()}`)
@@ -215,7 +265,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 20,
     height: 50,
-    marginBottom: 40,
+    marginBottom: 30,
     justifyContent: 'center',
     padding: 10,
     alignSelf: 'center',
@@ -233,7 +283,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'row',
-    marginBottom: 20,
     marginTop: 40,
     marginLeft: 10,
     marginRight: 10,
