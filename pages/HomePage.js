@@ -40,41 +40,22 @@ function HomePage(props) {
     })
   }
 
-  const currentTime = new Date()
-
   const [modalVisible, setModalVisible] = useState(false)
-  const [modalEvent, setModalEvent] = useState(-1)
-  const [modalEventName, setModalEventName] = useState('')
-  const [modalEventTime, setModalEventTime] = useState(new Date())
-  const [modalEventLocation, setModalEventLocation] = useState('location')
+  const [modalEvent, setModalEvent] = useState()
   const [modalEventHosting, setModalEventHosting] = useState(false)
   const [modalEventAttending, setModalEventAttending] = useState(false)
   const [modalEventRateable, setModalEventRateable] = useState(false)
-  const [modalEventHostUsername, setModalEventHostUsername] = useState('')
   const [modalEventAttendance, setModalEventAttendance] = useState(0)
   const [rating, setRating] = useState(0)
 
-  const openEvent = (
-    eventId,
-    eventName,
-    eventTime,
-    eventLocation,
-    hostUsername,
-    usersAttending,
-    isHosting = false,
-    isAttending = false
-  ) => {
-    setModalEvent(eventId)
-    setModalEventName(eventName)
-    setModalEventTime(eventTime)
-    setModalEventLocation(eventLocation)
-    setModalEventHostUsername(hostUsername)
+  const openEvent = (event, isHosting = false, isAttending = false) => {
+    setModalEvent(event)
     setModalEventHosting(isHosting)
     setModalEventAttending(isAttending)
-    setModalEventAttendance(usersAttending.length)
+    setModalEventAttendance(event.usersAttending.length)
     setModalEventRateable(!isHosting && isAttending)
-    console.log(`${eventName} rating: ${events[eventId].ratings[user]}`)
-    setRating(events[eventId].ratings[user])
+    console.log(`${event.eventName} rating: ${events[event.id].ratings[user]}`)
+    setRating(events[event.id].ratings[user])
     setModalVisible(true)
   }
   useEffect(() => {
@@ -106,69 +87,71 @@ function HomePage(props) {
         <Logo />
         <ProfileButton navigate={navigate} />
       </View>
-      <Modal
-        animationType="none"
-        transparent
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible)
-        }}
-      >
-        <TouchableOpacity // closes modal when you click outside
-          style={{ flex: 1 }}
-          activeOpacity={1}
-          onPress={() => {
-            setModalVisible(false)
+      {modalEvent != null && (
+        <Modal
+          animationType="none"
+          transparent
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible)
           }}
         >
-          <View style={styles.centeredView}>
-            <TouchableWithoutFeedback>
-              {/* prevents from closing when clicking inside modal */}
-              <View style={styles.modalView}>
-                <Text style={styles.modalTitleText}>{modalEventName}</Text>
-                <Text style={styles.modalText}>{`${convertTime(
-                  modalEventTime
-                )} at ${modalEventLocation}`}</Text>
-                <Text style={styles.modalText}>{`Hosted by ${modalEventHostUsername}`}</Text>
-                <Text style={styles.modalText}>{`Host rating: ${getUserRating(
-                  modalEventHostUsername
-                )}`}</Text>
-                <Text style={styles.modalText}>{`${modalEventAttendance} Attending`}</Text>
-                {modalEventRateable && (
-                  <StarRating
-                    rating={rating}
-                    onChange={(number) => {
-                      rateEvent(modalEvent, number).then(() => updateEventListing())
-                      setRating(number)
-                    }}
-                  />
-                )}
-                <View style={styles.modalButtonContainer}>
-                  {!modalEventAttending && (
+          <TouchableOpacity // closes modal when you click outside
+            style={{ flex: 1 }}
+            activeOpacity={1}
+            onPress={() => {
+              setModalVisible(false)
+            }}
+          >
+            <View style={styles.centeredView}>
+              <TouchableWithoutFeedback>
+                {/* prevents from closing when clicking inside modal */}
+                <View style={styles.modalView}>
+                  <Text style={styles.modalTitleText}>{modalEvent.eventName}</Text>
+                  <Text style={styles.modalText}>{`${convertTime(modalEvent.eventTime)} at ${
+                    modalEvent.eventLocation
+                  }`}</Text>
+                  <Text style={styles.modalText}>{`Hosted by ${modalEvent.hostUsername}`}</Text>
+                  <Text style={styles.modalText}>{`Host rating: ${getUserRating(
+                    modalEvent.hostUsername
+                  )}`}</Text>
+                  <Text style={styles.modalText}>{`${modalEventAttendance} Attending`}</Text>
+                  {modalEventRateable && (
+                    <StarRating
+                      rating={rating}
+                      onChange={(number) => {
+                        rateEvent(modalEvent.id, number).then(() => updateEventListing())
+                        setRating(number)
+                      }}
+                    />
+                  )}
+                  <View style={styles.modalButtonContainer}>
+                    {!modalEventAttending && (
+                      <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                          setModalEventAttending(true)
+                          attendEvent(modalEvent.id).then(() => updateEventListing())
+                          setModalEventAttendance(modalEventAttendance + 1)
+                          console.log(`event num: ${modalEvent.id}`)
+                        }}
+                      >
+                        <Text style={styles.textStyle}>Attend</Text>
+                      </Pressable>
+                    )}
                     <Pressable
                       style={[styles.button, styles.buttonClose]}
-                      onPress={() => {
-                        setModalEventAttending(true)
-                        attendEvent(modalEvent).then(() => updateEventListing())
-                        setModalEventAttendance(modalEventAttendance + 1)
-                        console.log(`event num: ${modalEvent}`)
-                      }}
+                      onPress={() => setModalVisible(!modalVisible)}
                     >
-                      <Text style={styles.textStyle}>Attend</Text>
+                      <Text style={styles.textStyle}>Close</Text>
                     </Pressable>
-                  )}
-                  <Pressable
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => setModalVisible(!modalVisible)}
-                  >
-                    <Text style={styles.textStyle}>Close</Text>
-                  </Pressable>
+                  </View>
                 </View>
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableOpacity>
-      </Modal>
+              </TouchableWithoutFeedback>
+            </View>
+          </TouchableOpacity>
+        </Modal>
+      )}
       <View style={styles.listContainer}>
         <FlatList
           data={events

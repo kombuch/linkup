@@ -2,17 +2,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { convertTime } from '../util/Time'
 
-function EventListItem(props) {
-  const {
-    id,
-    currentUser,
-    eventName,
-    eventTime,
-    eventLocation,
-    hostUsername,
-    usersAttending,
-    onPress,
-  } = props
+function EventListItem(event) {
+  const { currentUser, eventName, eventTime, hostUsername, usersAttending, onPress } = event
 
   const time = convertTime(eventTime)
 
@@ -21,20 +12,7 @@ function EventListItem(props) {
 
   if (hosting) {
     return (
-      <Pressable
-        onPress={() =>
-          onPress(
-            id,
-            eventName,
-            eventTime,
-            eventLocation,
-            hostUsername,
-            usersAttending,
-            hosting,
-            attending
-          )
-        }
-      >
+      <Pressable onPress={() => onPress(event, hosting, attending)}>
         <View style={styles.containerHosting}>
           <Text style={styles.eventName}>{eventName}</Text>
           <Text style={styles.eventTime}>{time}</Text>
@@ -44,20 +22,7 @@ function EventListItem(props) {
   }
   if (attending) {
     return (
-      <Pressable
-        onPress={() =>
-          onPress(
-            id,
-            eventName,
-            eventTime,
-            eventLocation,
-            hostUsername,
-            usersAttending,
-            hosting,
-            attending
-          )
-        }
-      >
+      <Pressable onPress={() => onPress(event, hosting, attending)}>
         <View style={styles.containerAttending}>
           <Text style={styles.eventName}>{eventName}</Text>
           <Text style={styles.eventTime}>{time}</Text>
@@ -67,9 +32,7 @@ function EventListItem(props) {
   }
 
   return (
-    <Pressable
-      onPress={() => onPress(id, eventName, eventTime, eventLocation, hostUsername, usersAttending)}
-    >
+    <Pressable onPress={() => onPress(event)}>
       <View style={styles.container}>
         <Text style={styles.eventName}>{eventName}</Text>
         <Text style={styles.eventTime}>{time}</Text>
