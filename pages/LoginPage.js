@@ -1,6 +1,7 @@
 import { Alert, StyleSheet, TextInput, Text, View, Pressable, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Logo from './components/Logo'
 import { getCurrentEmail, getCurrentPass, tryLogin } from './util/Storage'
 
@@ -9,6 +10,16 @@ function LoginPage(props) {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [tapCount, setTapCount] = useState(0)
+
+  useEffect(() => {
+    if (tapCount > 5) {
+      setTapCount(0)
+      AsyncStorage.clear()
+      setEmail('')
+      setPassword('')
+    }
+  }, [tapCount])
 
   useEffect(() => {
     getCurrentEmail().then((currentEmail) => {
@@ -36,9 +47,15 @@ function LoginPage(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Logo />
-      </View>
+      <Pressable
+        onPress={() => {
+          setTapCount((currentCount) => currentCount + 1)
+        }}
+      >
+        <View style={styles.logoContainer}>
+          <Logo />
+        </View>
+      </Pressable>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
