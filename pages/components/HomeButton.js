@@ -6,7 +6,7 @@ function HomeButton(props) {
   return (
     <Pressable onPress={() => navigate('home')}>
       <View style={styles.logoBG}>
-        <Text style={styles.header}>Home</Text>
+        <Text style={styles.header}>Back</Text>
       </View>
     </Pressable>
   )
