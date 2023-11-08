@@ -175,7 +175,10 @@ const updateUserRating = async (username) => {
     if (count === 0) {
       await AsyncStorage.setItem(key, 'no ratings yet')
     } else {
-      await AsyncStorage.setItem(key, `${Math.round((total / count) * 10) / 10} / 5`)
+      await AsyncStorage.setItem(
+        key,
+        `${Math.round((total / count) * 10) / 10} / 5 from ${count} ratings`
+      )
     }
   } catch (e) {
     // saving error

@@ -117,7 +117,7 @@ function HomePage(props) {
                     modalEvent.eventTime
                   )} - ${convertTime(modalEventEndTime)} at ${modalEvent.eventLocation}`}</Text>
                   <Text style={styles.modalText}>{`Hosted by ${modalEvent.hostUsername}`}</Text>
-                  <Text style={styles.modalText}>{`Host rating: ${modalUserRating}`}</Text>
+                  <Text style={styles.modalText}>{`Host is rated ${modalUserRating}`}</Text>
                   <Text style={styles.modalText}>{`${modalEventAttendance} Attending`}</Text>
                   {modalEventRateable && (
                     <StarRating
