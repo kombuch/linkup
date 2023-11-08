@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 import EventListItem from './components/EventListItem'
 import { getCurrentUsername, getEvents } from './util/Storage'
 import HomeButton from './components/HomeButton'
 import LogoutButton from './components/LogoutButton'
+
+const topMargin = Platform.OS === 'web' ? 0 : 40
 
 function ProfilePage(props) {
   const { navigate } = props
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    marginTop: 40,
+    marginTop: topMargin,
     marginBottom: 20,
   },
   bottomContainer: {
