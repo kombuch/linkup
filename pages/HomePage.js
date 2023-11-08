@@ -60,7 +60,7 @@ function HomePage(props) {
   }
   useEffect(() => {
     setModalEventRateable(!modalEventHosting && modalEventAttending)
-  }, [modalEventAttending])
+  }, [modalVisible])
 
   const getUserRating = (userName) => {
     let total = 0
