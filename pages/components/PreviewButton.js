@@ -1,18 +1,18 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-function CreateButton(props) {
+function PreviewButton(props) {
   const { onPress } = props
   return (
     <Pressable onPress={onPress}>
       <View style={styles.container}>
-        <Text style={styles.header}>Create</Text>
+        <Text style={styles.header}>Preview</Text>
       </View>
     </Pressable>
   )
 }
 
-export default CreateButton
+export default PreviewButton
 
 const styles = StyleSheet.create({
   header: {

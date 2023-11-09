@@ -1,28 +1,13 @@
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  Modal,
-  Text,
-  Pressable,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from 'react-native'
+import { StyleSheet, View, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
-import StarRating from 'react-native-star-rating-widget'
 import EventListItem from './components/EventListItem'
 import HostButton from './components/HostButton'
 import Logo from './components/Logo'
 import ProfileButton from './components/ProfileButton'
-import {
-  attendEvent,
-  getCurrentUsername,
-  getEvents,
-  getUserRatingText,
-  rateEvent,
-} from './util/Storage'
-import { addMinutes, convertTime } from './util/Time'
+import { getCurrentUsername, getEvents } from './util/Storage'
+import { addMinutes } from './util/Time'
+import EventModal from './components/EventModal'
 
 function HomePage(props) {
   const { navigate } = props
@@ -58,33 +43,14 @@ function HomePage(props) {
 
   const [modalVisible, setModalVisible] = useState(false)
   const [modalEvent, setModalEvent] = useState()
-  const [modalEventEndTime, setModalEventEndTime] = useState()
-  const [modalEventHosting, setModalEventHosting] = useState(false)
-  const [modalEventAttending, setModalEventAttending] = useState(false)
-  const [modalEventRateable, setModalEventRateable] = useState(false)
-  const [modalEventAttendance, setModalEventAttendance] = useState(0)
-  const [modalUserRating, setModalUserRating] = useState('')
-  const [rating, setRating] = useState(0)
+  const [modalEventRateable, setModalEventRateable] = useState()
 
-  const openEvent = (event, isHosting = false, isAttending = false) => {
+  const openEvent = (event) => {
     setModalEvent(event)
-    setModalEventHosting(isHosting)
-    setModalEventAttending(isAttending)
-    setModalEventAttendance(event.usersAttending.length)
-    setModalEventRateable(!isHosting && isAttending)
+    setModalEventRateable(event.hostUsername !== user && event.usersAttending.includes(user))
     console.log(`${event.eventName} rating: ${events[event.id].ratings[user]}`)
-    setRating(events[event.id].ratings[user])
-    setModalEventEndTime(addMinutes(event.eventTime, event.minuteDuration))
     setModalVisible(true)
   }
-
-  useEffect(() => {
-    if (modalEvent != null) {
-      getUserRatingText(modalEvent.hostUsername).then((text) => {
-        setModalUserRating(text)
-      })
-    }
-  }, [modalEvent])
 
   return (
     <View style={styles.container}>
@@ -92,72 +58,15 @@ function HomePage(props) {
         <Logo />
         <ProfileButton navigate={navigate} />
       </View>
-      {modalEvent != null && (
-        <Modal
-          animationType="none"
-          transparent
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible)
-          }}
-        >
-          <TouchableOpacity // closes modal when you click outside
-            style={{ flex: 1 }}
-            activeOpacity={1}
-            onPress={() => {
-              setModalVisible(false)
-            }}
-          >
-            <View style={styles.centeredView}>
-              <TouchableWithoutFeedback>
-                {/* prevents from closing when clicking inside modal */}
-                <View style={styles.modalView}>
-                  <Text style={styles.modalTitleText}>{modalEvent.eventName}</Text>
-                  <Text style={styles.modalText}>{`${convertTime(
-                    modalEvent.eventTime
-                  )} - ${convertTime(modalEventEndTime)} at ${modalEvent.eventLocation}`}</Text>
-                  <Text style={styles.modalText}>{`Hosted by ${modalEvent.hostUsername}`}</Text>
-                  <Text style={styles.modalText}>{`Host is rated ${modalUserRating}`}</Text>
-                  <Text style={styles.modalText}>{`${modalEventAttendance} Attending`}</Text>
-                  {modalEventRateable && (
-                    <StarRating
-                      rating={rating}
-                      onChange={(number) => {
-                        rateEvent(modalEvent.id, number).then(() =>
-                          getUserRatingText(modalEvent.hostUsername).then((text) => {
-                            setModalUserRating(text)
-                          })
-                        )
-                        setRating(number)
-                      }}
-                    />
-                  )}
-                  <View style={styles.modalButtonContainer}>
-                    {!modalEventAttending && (
-                      <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                          setModalEventAttending(true)
-                          attendEvent(modalEvent.id).then(() => updateEventListing())
-                          setModalEventAttendance(modalEventAttendance + 1)
-                          console.log(`event num: ${modalEvent.id}`)
-                        }}
-                      >
-                        <Text style={styles.textStyle}>Attend</Text>
-                      </Pressable>
-                    )}
-                    <Pressable
-                      style={[styles.button, styles.buttonClose]}
-                      onPress={() => setModalVisible(!modalVisible)}
-                    >
-                      <Text style={styles.textStyle}>Close</Text>
-                    </Pressable>
-                  </View>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </TouchableOpacity>
-        </Modal>
+      {modalEvent != null && modalVisible && (
+        <EventModal
+          event={modalEvent}
+          currentUser={user}
+          modalVisible={modalVisible}
+          modalEventRateable={modalEventRateable}
+          setModalVisible={setModalVisible}
+          updateEventListing={updateEventListing}
+        />
       )}
       <View style={styles.listContainer}>
         <FlatList
@@ -165,7 +74,7 @@ function HomePage(props) {
             .filter((item) => addMinutes(item.eventTime, item.minuteDuration) > now) // filter out past events
             .sort((a, b) => a.eventTime - b.eventTime)}
           renderItem={({ item }) => (
-            <EventListItem {...item} currentUser={user} onPress={openEvent} />
+            <EventListItem event={item} currentUser={user} onPress={openEvent} />
           )}
           keyExtractor={(item) => item.id}
           initialNumToRender={20}
@@ -184,7 +93,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     backgroundColor: '#fff',
-    borderColor: 'orange',
+    borderColor: '#e87500',
     borderWidth: 2,
     borderRadius: 10,
     padding: 55,
@@ -216,7 +125,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   buttonClose: {
-    backgroundColor: 'orange',
+    backgroundColor: '#e87500',
   },
   modalText: {
     marginBottom: 15,

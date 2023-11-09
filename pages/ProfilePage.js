@@ -5,6 +5,7 @@ import EventListItem from './components/EventListItem'
 import { getCurrentUsername, getEvents } from './util/Storage'
 import HomeButton from './components/HomeButton'
 import LogoutButton from './components/LogoutButton'
+import EventModal from './components/EventModal'
 
 const topMargin = Platform.OS === 'web' ? 0 : 40
 
@@ -22,20 +23,49 @@ function ProfilePage(props) {
     getCurrentUsername().then((data) => setUser(data))
   }, [])
 
+  const [modalVisible, setModalVisible] = useState(false)
+  const [modalEvent, setModalEvent] = useState()
+  const [modalEventRateable, setModalEventRateable] = useState()
+
+  const openEvent = (event) => {
+    setModalEvent(event)
+    setModalEventRateable(event.hostUsername !== user && event.usersAttending.includes(user))
+    setModalVisible(true)
+  }
+
+  const updateEventListing = () => {
+    getEvents().then((stored) => {
+      setEvents(stored)
+      console.log(`updatedEvents: ${stored}`)
+    })
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
         {user != null && <Text style={styles.welcomeText}>{`Hello ${user}!`}</Text>}
         <View style={styles.seperator} />
       </View>
+      {modalEvent != null && modalVisible && (
+        <EventModal
+          event={modalEvent}
+          currentUser={user}
+          modalVisible={modalVisible}
+          modalEventRateable={modalEventRateable}
+          setModalVisible={setModalVisible}
+          updateEventListing={updateEventListing}
+        />
+      )}
       <View style={styles.innerContainer}>
         <Text style={styles.titleText}>Attended Events</Text>
         <View style={styles.listContainer}>
           <FlatList
             data={events
-              .sort((a, b) => a.eventTime - b.eventTime)
+              .sort((a, b) => b.eventTime - a.eventTime)
               .filter((item) => item.hostUsername !== user && item.usersAttending.includes(user))}
-            renderItem={({ item }) => <EventListItem {...item} currentUser={user} />}
+            renderItem={({ item }) => (
+              <EventListItem event={item} currentUser={user} onPress={openEvent} />
+            )}
             keyExtractor={(item) => item.id}
           />
         </View>
@@ -43,9 +73,11 @@ function ProfilePage(props) {
         <View style={styles.listContainer}>
           <FlatList
             data={events
-              .sort((a, b) => a.eventTime - b.eventTime)
+              .sort((a, b) => b.eventTime - a.eventTime)
               .filter((item) => item.hostUsername === user)}
-            renderItem={({ item }) => <EventListItem {...item} currentUser={user} />}
+            renderItem={({ item }) => (
+              <EventListItem event={item} currentUser={user} onPress={openEvent} />
+            )}
             keyExtractor={(item) => item.id}
           />
         </View>

@@ -173,11 +173,16 @@ const updateUserRating = async (username) => {
     })
     const key = `rating:${username}`
     if (count === 0) {
-      await AsyncStorage.setItem(key, 'no ratings yet')
+      await AsyncStorage.setItem(key, 'Host has no ratings yet')
+    } else if (count === 1) {
+      await AsyncStorage.setItem(
+        key,
+        `Host is rated ${Math.round((total / count) * 10) / 10} / 5 from ${count} rating`
+      )
     } else {
       await AsyncStorage.setItem(
         key,
-        `${Math.round((total / count) * 10) / 10} / 5 from ${count} ratings`
+        `Host is rated ${Math.round((total / count) * 10) / 10} / 5 from ${count} ratings`
       )
     }
   } catch (e) {

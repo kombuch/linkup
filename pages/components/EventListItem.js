@@ -2,8 +2,9 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { convertTime } from '../util/Time'
 
-function EventListItem(event) {
-  const { currentUser, eventName, eventTime, hostUsername, usersAttending, onPress } = event
+function EventListItem(props) {
+  const { currentUser, event, onPress } = props
+  const { eventName, eventTime, hostUsername, usersAttending } = event
 
   const time = convertTime(eventTime)
 

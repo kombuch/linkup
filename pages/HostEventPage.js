@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TextInput } from 'react-native'
 
-import CreateButton from './components/CreateButton'
+import PreviewButton from './components/PreviewButton'
 import BackButton from './components/BackButton'
-import { addEvent } from './util/Storage'
+import { addEvent, getCurrentUsername } from './util/Storage'
+import EventModal from './components/EventModal'
 
 function HostEventPage(props) {
   const { navigate } = props
@@ -105,10 +106,39 @@ function HostEventPage(props) {
     }
   }, [durationBlinking])
 
-  const create = (date) => {
-    const durationInt = parseInt(duration, 10)
-    console.log(`duration int: ${durationInt}`)
-    addEvent(eventName, date, durationInt, eventLocation).then((success) => {
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    getCurrentUsername().then((data) => setUser(data))
+  }, [])
+
+  const [modalVisible, setModalVisible] = useState(false)
+  const [modalEvent, setModalEvent] = useState()
+
+  const openPreview = (date) => {
+    const minuteDuration = parseInt(duration, 10)
+    setModalEvent({
+      id: -1,
+      eventName,
+      eventTime: date,
+      minuteDuration,
+      creationTime: new Date(),
+      eventLocation,
+      usersAttending: [user],
+      ratings: {},
+      deleted: false,
+      hostUsername: user,
+    })
+    setModalVisible(true)
+  }
+
+  const create = () => {
+    addEvent(
+      modalEvent.eventName,
+      modalEvent.eventTime,
+      modalEvent.minuteDuration,
+      modalEvent.eventLocation
+    ).then((success) => {
       if (success) navigate('home')
     })
   }
@@ -118,6 +148,16 @@ function HostEventPage(props) {
       <View style={styles.topContainer}>
         <Text style={styles.header}>Create Event</Text>
       </View>
+      {modalEvent != null && modalVisible && (
+        <EventModal
+          event={modalEvent}
+          currentUser={user}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          preview
+          previewOnPress={create}
+        />
+      )}
       <View style={styles.listContainer}>
         {invalidName ? (
           <Text style={styles.badInputLabel}>Event Name</Text>
@@ -164,7 +204,7 @@ function HostEventPage(props) {
       </View>
       <View style={styles.bottomContainer}>
         <BackButton navigate={navigate} />
-        <CreateButton
+        <PreviewButton
           onPress={() => {
             // TODO - Input checking
             const date = ampmTo24H(eventTime)
@@ -187,7 +227,7 @@ function HostEventPage(props) {
             }
             if (validInputs) {
               console.log(`ds: ${date.toDateString()}`)
-              create(date)
+              openPreview(date)
             }
           }}
         />
