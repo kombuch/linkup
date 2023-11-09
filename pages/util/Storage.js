@@ -1,10 +1,21 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-/* Account Creation Code
+export const createAccount = async (username, email, password) => {
+  try {
+    const existing = await AsyncStorage.getItem(email)
+    if (existing != null) {
+      console.log(existing)
+      return false
+    }
     AsyncStorage.setItem(`${email}:name`, username)
     AsyncStorage.setItem(email, password)
     AsyncStorage.setItem('currentUser', email)
-*/
+    return true
+  } catch (e) {
+    // error reading value
+    return false
+  }
+}
 
 export const getCurrentUsername = async () => {
   try {

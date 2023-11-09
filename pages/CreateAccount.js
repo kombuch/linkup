@@ -2,6 +2,7 @@ import { StyleSheet, TextInput, Text, View, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Logo from './components/Logo'
+import { createAccount } from './util/Storage'
 
 function LoginPage(props) {
   const { navigate } = props
@@ -46,14 +47,13 @@ function LoginPage(props) {
       <Pressable
         style={styles.button}
         onPress={() => {
-          try {
-            AsyncStorage.setItem(`${email}:name`, username)
-            AsyncStorage.setItem(email, password)
-            AsyncStorage.setItem('currentUser', email)
-          } catch (e) {
-            console.log('ERROR CREATING ACCOUNT')
-          }
-          navigate('login')
+          createAccount(username, email, password).then((success) => {
+            if (success) {
+              navigate('login')
+            } else {
+              alert('Email In Use')
+            }
+          })
         }}
       >
         <Text style={styles.text}>Create</Text>
