@@ -1,8 +1,8 @@
 import { StyleSheet, TextInput, Text, View, Pressable } from 'react-native'
 import React, { useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import Logo from './components/Logo'
 import { createAccount } from './util/Storage'
+import AlertModal from './components/AlertModal'
 
 function LoginPage(props) {
   const { navigate } = props
@@ -10,9 +10,16 @@ function LoginPage(props) {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [alertMessage, setAlertMessage] = useState('')
+  const [modalVisible, setModalVisible] = useState(false)
 
   return (
     <View style={styles.container}>
+      <AlertModal
+        message={alertMessage}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
       <View style={styles.logoContainer}>
         <Logo />
       </View>
@@ -47,11 +54,18 @@ function LoginPage(props) {
       <Pressable
         style={styles.button}
         onPress={() => {
-          createAccount(username, email, password).then((success) => {
-            if (success) {
+          createAccount(username, email, password).then((error) => {
+            if (error === 0) {
               navigate('login')
+            } else if (error === 1) {
+              setAlertMessage('Username already in use')
+              setModalVisible(true)
+            } else if (error === 2) {
+              setAlertMessage('Email already in use')
+              setModalVisible(true)
             } else {
-              alert('Email In Use')
+              setAlertMessage('Error creating account')
+              setModalVisible(true)
             }
           })
         }}

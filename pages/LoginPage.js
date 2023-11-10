@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Logo from './components/Logo'
 import { getCurrentEmail, getCurrentPass, tryLogin } from './util/Storage'
+import AlertModal from './components/AlertModal'
 
 function LoginPage(props) {
   const { navigate } = props
@@ -11,6 +12,8 @@ function LoginPage(props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [tapCount, setTapCount] = useState(0)
+  const [alertMessage, setAlertMessage] = useState('')
+  const [modalVisible, setModalVisible] = useState(false)
 
   useEffect(() => {
     if (tapCount > 5) {
@@ -25,28 +28,23 @@ function LoginPage(props) {
     getCurrentEmail().then((currentEmail) => {
       if (currentEmail !== null) {
         setEmail(currentEmail)
-      }
-    })
-    getCurrentPass().then((currentPass) => {
-      if (currentPass !== null) {
-        setPassword(currentPass)
+
+        getCurrentPass().then((currentPass) => {
+          if (currentPass !== null) {
+            setPassword(currentPass)
+          }
+        })
       }
     })
   }, []) // prevents this code from running on every render
 
-  const loginFailAlert = () => {
-    if (Platform.OS === 'web') {
-      // eslint-disable-next-line no-alert, no-undef
-      alert('Incorrect Login')
-    } else {
-      Alert.alert('Incorrect login', 'Please try again', [
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
-      ])
-    }
-  }
-
   return (
     <View style={styles.container}>
+      <AlertModal
+        message={alertMessage}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
       <Pressable
         onPress={() => {
           setTapCount((currentCount) => currentCount + 1)
@@ -82,7 +80,8 @@ function LoginPage(props) {
             if (success) {
               navigate('home')
             } else {
-              loginFailAlert()
+              setAlertMessage('Username or password is invalid')
+              setModalVisible(true)
             }
           })
         }}

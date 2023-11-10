@@ -1,27 +1,60 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export const createAccount = async (username, email, password) => {
+// event methods
+export const getUsers = async () => {
   try {
-    const existing = await AsyncStorage.getItem(email)
-    if (existing != null) {
-      console.log(existing)
-      return false
+    const usersJson = await AsyncStorage.getItem('users')
+    console.log(`usersJson: ${usersJson}`)
+    if (usersJson != null) {
+      console.log('non-Empty users')
+      return JSON.parse(usersJson)
     }
-    AsyncStorage.setItem(`${email}:name`, username)
-    AsyncStorage.setItem(email, password)
-    AsyncStorage.setItem('currentUser', email)
-    return true
+    console.log('Empty users')
+    return {}
   } catch (e) {
     // error reading value
-    return false
+  }
+  return {}
+}
+
+// store users as objects in object indexed by email
+// return 0 = success, 1 = username exists, 2 = email exists, 3 unknown error
+export const createAccount = async (username, email, password) => {
+  try {
+    const users = await getUsers()
+    console.log(`usersObj: ${JSON.stringify(users)}`)
+
+    const newAccount = { username, password }
+
+    const emails = Object.keys(users)
+
+    for (let i = 0; i < emails.length; i += 1) {
+      const key = emails[i]
+      console.log(`user: ${users[key].username} vs ${username}`)
+      if (users[key].username === username) return 1
+      console.log(`user: ${key} vs ${email}`)
+      if (key === email) return 2
+    }
+
+    users[email] = newAccount
+    await AsyncStorage.setItem('users', JSON.stringify(users))
+    await AsyncStorage.setItem('currentUser', email)
+
+    return 0
+  } catch (e) {
+    console.log(e)
+    // error reading value
+    return 3
   }
 }
 
 export const getCurrentUsername = async () => {
   try {
-    const email = await AsyncStorage.getItem('currentUser')
+    const email = await getCurrentEmail()
     if (email !== null) {
-      const username = await AsyncStorage.getItem(`${email}:name`)
+      const usersJson = await AsyncStorage.getItem('users')
+      const users = JSON.parse(usersJson)
+      const { username } = users[email]
 
       if (username !== null) {
         console.log(`getUsername: ${username}`)
@@ -50,15 +83,19 @@ export const getCurrentEmail = async () => {
 export const getCurrentPass = async () => {
   try {
     const email = await AsyncStorage.getItem('currentUser')
+    console.log(`getPassEmail: ${email}`)
     if (email !== null) {
-      const pass = await AsyncStorage.getItem(email)
+      const usersJson = await AsyncStorage.getItem('users')
+      const users = JSON.parse(usersJson)
+      const { password } = users[email]
 
-      if (pass !== null) {
-        console.log(`getCurrentPass: ${pass}`)
-        return pass
+      console.log(`getPass: ${password}`)
+      if (password !== null) {
+        return password
       }
     }
   } catch (e) {
+    console.log(e)
     // error reading value
   }
   return null
@@ -67,8 +104,10 @@ export const getCurrentPass = async () => {
 // return true if login is successful
 export const tryLogin = async (email, pass) => {
   try {
-    const realPass = await AsyncStorage.getItem(email)
-    if (email !== null && realPass === pass) {
+    const usersJson = await AsyncStorage.getItem('users')
+    const users = JSON.parse(usersJson)
+    const { password } = users[email]
+    if (password === pass) {
       AsyncStorage.setItem('currentUser', email)
       return true
     }
