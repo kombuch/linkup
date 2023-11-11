@@ -13,7 +13,7 @@ export default Logo
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 40,
+    fontSize: 35,
     textAlign: 'center',
     color: '#fff',
     fontFamily: 'Gill Sans',

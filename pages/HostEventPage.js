@@ -203,7 +203,7 @@ function HostEventPage(props) {
         </View>
       </View>
       <View style={styles.bottomContainer}>
-        <BackButton navigate={navigate} />
+        <BackButton navigate={navigate} dest="home" />
         <PreviewButton
           onPress={() => {
             // TODO - Input checking
@@ -280,20 +280,20 @@ const ampmTo24H = (t) => {
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 40,
+    fontSize: 35,
     textAlign: 'center',
     color: '#fff',
     fontFamily: 'Gill Sans',
   },
   inputLabel: {
-    fontSize: 20,
+    fontSize: 25,
     textAlign: 'left',
     color: '#fff',
     fontFamily: 'Gill Sans',
     marginLeft: '14%',
   },
   badInputLabel: {
-    fontSize: 20,
+    fontSize: 25,
     textAlign: 'left',
     color: 'red',
     fontFamily: 'Gill Sans',
@@ -305,6 +305,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 20,
     height: 50,
+    marginTop: 6,
     marginBottom: 30,
     justifyContent: 'center',
     padding: 10,
@@ -320,10 +321,9 @@ const styles = StyleSheet.create({
     gap: 30,
   },
   topContainer: {
-    flex: 1,
     justifyContent: 'center',
     flexDirection: 'row',
-    marginTop: 40,
+    marginTop: 30,
     marginLeft: 10,
     marginRight: 10,
   },
@@ -337,8 +337,7 @@ const styles = StyleSheet.create({
     gap: 30,
   },
   listContainer: {
-    flex: 7,
-    gap: 10,
+    flex: 8,
   },
   input: {
     borderWidth: 1,

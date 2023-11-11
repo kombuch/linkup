@@ -32,15 +32,10 @@ function AlertModal(props) {
           <TouchableWithoutFeedback>
             {/* prevents from closing when clicking inside modal */}
             <View style={styles.modalView}>
-              <Text style={styles.modalTitleText}>{message}</Text>
-              <View style={styles.modalButtonContainer}>
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => setModalVisible(false)}
-                >
-                  <Text style={styles.closeText}>Close</Text>
-                </Pressable>
-              </View>
+              <Text style={styles.messageText}>{message}</Text>
+              <Pressable style={styles.buttonClose} onPress={() => setModalVisible(false)}>
+                <Text style={styles.buttonText}>Close</Text>
+              </Pressable>
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -52,16 +47,14 @@ function AlertModal(props) {
 export default AlertModal
 
 const styles = StyleSheet.create({
-  textStyle: { color: '#fff' },
-  closeText: {},
   modalView: {
     margin: 20,
     backgroundColor: '#fff',
     borderColor: '#e87500',
     borderWidth: 2,
     borderRadius: 10,
-    minWidth: 335,
-    padding: 55,
+    minWidth: 280,
+    padding: 20,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -78,72 +71,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 22,
   },
-
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-    color: '#fff',
-    backgroundColor: '#e87500',
-  },
-  modalButtonContainer: {
-    gap: 20,
-    marginTop: 20,
-    flexDirection: 'row',
-  },
+  buttonText: { fontSize: 15 },
   buttonClose: {
+    borderRadius: 25,
+    padding: 10,
     backgroundColor: '#aaa',
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  modalTitleText: {
-    marginBottom: 15,
-    fontSize: 30,
-    textAlign: 'center',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#154734',
-    gap: 30,
-  },
-  topContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-    marginTop: 40,
-    marginLeft: 10,
-    marginRight: 10,
-    gap: 50,
-  },
-  bottomContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    flexDirection: 'row',
+  messageText: {
+    marginTop: 5,
     marginBottom: 25,
-    marginLeft: 10,
-    marginRight: 10,
-    gap: 50,
-  },
-  listContainer: {
-    flex: 10,
-    gap: 30,
-    backgroundColor: '#154034',
-    borderRadius: 20,
-    margin: 8,
-    paddingTop: 8,
-  },
-  inputContainer: {
-    gap: 5,
-    justifyContent: 'flex-start',
-  },
-  input: {
-    borderWidth: 1,
-    borderRadius: 5,
-    height: 30,
-    padding: 10,
-    margin: 10,
+    fontSize: 25,
+    textAlign: 'center',
   },
 })

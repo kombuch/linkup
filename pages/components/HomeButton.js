@@ -16,7 +16,7 @@ export default HomeButton
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 40,
+    fontSize: 25,
     textAlign: 'center',
     color: '#fff',
     fontFamily: 'Gill Sans',

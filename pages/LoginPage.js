@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, TextInput, Text, View, Pressable, Platform } from 'react-native'
+import { StyleSheet, TextInput, Text, View, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -40,11 +40,6 @@ function LoginPage(props) {
 
   return (
     <View style={styles.container}>
-      <AlertModal
-        message={alertMessage}
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-      />
       <Pressable
         onPress={() => {
           setTapCount((currentCount) => currentCount + 1)
@@ -96,6 +91,12 @@ function LoginPage(props) {
       >
         <Text style={styles.text}>Create Account</Text>
       </Pressable>
+
+      <AlertModal
+        message={alertMessage}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </View>
   )
 }
@@ -127,20 +128,18 @@ const styles = StyleSheet.create({
     height: 50,
     color: 'black',
   },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: 'black',
-  },
   text: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: 'bold',
-    letterSpacing: 0.25,
-    color: 'white',
+    fontSize: 25,
+    textAlign: 'center',
+    color: '#fff',
+    fontFamily: 'Gill Sans',
+    marginHorizontal: 30,
+  },
+  button: {
+    borderRadius: 40,
+    alignContent: 'center',
+    justifyContent: 'center',
+    height: 60,
+    backgroundColor: '#000',
   },
 })

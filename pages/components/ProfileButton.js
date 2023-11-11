@@ -23,7 +23,7 @@ export default ProfileButton
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 40,
+    fontSize: 25,
     textAlign: 'center',
     color: '#000',
     fontFamily: 'Gill Sans',

@@ -20,7 +20,7 @@ export default HostButton
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 40,
+    fontSize: 25,
     textAlign: 'center',
     color: '#fff',
     fontFamily: 'Gill Sans',
