@@ -43,7 +43,9 @@ function ProfilePage(props) {
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        {user != null && <Text style={styles.welcomeText}>{`Hello ${user}!`}</Text>}
+        {user != null && (
+          <Text numberOfLines={1} style={styles.welcomeText}>{`Hello ${user}!`}</Text>
+        )}
         <View style={styles.seperator} />
       </View>
       {modalEvent != null && modalVisible && (
@@ -152,10 +154,11 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     textAlign: 'center',
-    fontSize: 45,
+    fontSize: 40,
     fontWeight: 'bold',
     marginTop: 5,
-    letterSpacing: 0.25,
+    marginHorizontal: 5,
+    letterSpacing: 0.2,
     color: 'white',
   },
   titleText: {

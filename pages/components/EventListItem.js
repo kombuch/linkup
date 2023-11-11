@@ -15,7 +15,9 @@ function EventListItem(props) {
     return (
       <Pressable onPress={() => onPress(event, hosting, attending)}>
         <View style={styles.containerHosting}>
-          <Text style={styles.eventName}>{eventName}</Text>
+          <Text numberOfLines={1} style={styles.eventName}>
+            {eventName}
+          </Text>
           <Text style={styles.eventTime}>{time}</Text>
         </View>
       </Pressable>
@@ -25,7 +27,9 @@ function EventListItem(props) {
     return (
       <Pressable onPress={() => onPress(event, hosting, attending)}>
         <View style={styles.containerAttending}>
-          <Text style={styles.eventName}>{eventName}</Text>
+          <Text numberOfLines={1} style={styles.eventName}>
+            {eventName}
+          </Text>
           <Text style={styles.eventTime}>{time}</Text>
         </View>
       </Pressable>
@@ -35,7 +39,9 @@ function EventListItem(props) {
   return (
     <Pressable onPress={() => onPress(event)}>
       <View style={styles.container}>
-        <Text style={styles.eventName}>{eventName}</Text>
+        <Text numberOfLines={1} style={styles.eventName}>
+          {eventName}
+        </Text>
         <Text style={styles.eventTime}>{time}</Text>
       </View>
     </Pressable>
