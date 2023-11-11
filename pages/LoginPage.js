@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '80%',
+    maxWidth: 500,
     backgroundColor: '#fff',
     borderRadius: 20,
     height: 50,

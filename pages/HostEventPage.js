@@ -159,47 +159,55 @@ function HostEventPage(props) {
         />
       )}
       <View style={styles.listContainer}>
-        {invalidName ? (
-          <Text style={styles.badInputLabel}>Event Name</Text>
-        ) : (
-          <Text style={styles.inputLabel}>Event Name</Text>
-        )}
-        <View style={styles.inputContainer}>
-          <TextInput style={styles.inputText} value={eventName} onChangeText={setEventName} />
+        <View style={styles.inputAndTextContainer}>
+          {invalidName ? (
+            <Text style={styles.badInputLabel}>Event Name</Text>
+          ) : (
+            <Text style={styles.inputLabel}>Event Name</Text>
+          )}
+          <View style={styles.inputContainer}>
+            <TextInput style={styles.inputText} value={eventName} onChangeText={setEventName} />
+          </View>
         </View>
-        {invalidTime ? (
-          <Text style={styles.badInputLabel}>Start Time</Text>
-        ) : (
-          <Text style={styles.inputLabel}>Start Time</Text>
-        )}
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputText}
-            value={eventTime}
-            onChangeText={setEventTime}
-            placeholder="ex: 5:20pm"
-          />
+        <View style={styles.inputAndTextContainer}>
+          {invalidTime ? (
+            <Text style={styles.badInputLabel}>Start Time</Text>
+          ) : (
+            <Text style={styles.inputLabel}>Start Time</Text>
+          )}
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.inputText}
+              value={eventTime}
+              onChangeText={setEventTime}
+              placeholder="ex: 5:20pm"
+            />
+          </View>
         </View>
-        {invalidDuration ? (
-          <Text style={styles.badInputLabel}>Duration (Minutes)</Text>
-        ) : (
-          <Text style={styles.inputLabel}>Duration (Minutes)</Text>
-        )}
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputText}
-            value={duration}
-            onChangeText={setDuration}
-            placeholder="ex: 60"
-          />
+        <View style={styles.inputAndTextContainer}>
+          {invalidDuration ? (
+            <Text style={styles.badInputLabel}>Duration (Minutes)</Text>
+          ) : (
+            <Text style={styles.inputLabel}>Duration (Minutes)</Text>
+          )}
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.inputText}
+              value={duration}
+              onChangeText={setDuration}
+              placeholder="ex: 60"
+            />
+          </View>
         </View>
-        <Text style={styles.inputLabel}>Location</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputText}
-            value={eventLocation}
-            onChangeText={setEventLocation}
-          />
+        <View style={styles.inputAndTextContainer}>
+          <Text style={styles.inputLabel}>Location</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.inputText}
+              value={eventLocation}
+              onChangeText={setEventLocation}
+            />
+          </View>
         </View>
       </View>
       <View style={styles.bottomContainer}>
@@ -301,7 +309,8 @@ const styles = StyleSheet.create({
   },
 
   inputContainer: {
-    width: '80%',
+    width: '100%',
+    maxWidth: 550,
     backgroundColor: '#fff',
     borderRadius: 20,
     height: 50,
@@ -309,6 +318,11 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     justifyContent: 'center',
     padding: 10,
+    alignSelf: 'center',
+  },
+  inputAndTextContainer: {
+    width: '80%',
+    maxWidth: 550,
     alignSelf: 'center',
   },
   inputText: {

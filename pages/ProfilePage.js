@@ -96,14 +96,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#154734',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   innerContainer: {
+    width: '100%',
+    maxWidth: 650,
     flex: 6,
   },
   topContainer: {
     flex: 1,
     marginTop: topMargin,
     marginBottom: 20,
+    width: '100%',
+    maxWidth: 600,
   },
   bottomContainer: {
     flex: 1,
@@ -124,6 +130,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#e87500',
   },
   listContainer: {
+    width: '95%',
+    maxWidth: 650,
     flex: 10,
     gap: 30,
     backgroundColor: '#154034',

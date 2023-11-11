@@ -140,6 +140,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#154734',
     gap: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   topContainer: {
     flex: 1,
@@ -161,6 +163,8 @@ const styles = StyleSheet.create({
     gap: 50,
   },
   listContainer: {
+    width: '95%',
+    maxWidth: 650,
     flex: 10,
     gap: 30,
     backgroundColor: '#154034',
