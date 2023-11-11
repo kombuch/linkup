@@ -92,7 +92,8 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     backgroundColor: '#154734',
-    marginTop: 40,
+    marginTop: 60,
+    margin: 10,
     alignItems: 'center',
     justifyContent: 'flex-end',
     flex: 1,
@@ -100,8 +101,8 @@ const styles = StyleSheet.create({
   inputsContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 30,
-    flex: 3,
+    gap: 35,
+    flex: 5,
   },
   inputContainer: {
     width: '80%',
