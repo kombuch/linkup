@@ -53,20 +53,31 @@ function LoginPage(props) {
         <Pressable
           style={styles.createButtonBG}
           onPress={() => {
-            createAccount(username, email, password).then((error) => {
-              if (error === 0) {
-                navigate('login')
-              } else if (error === 1) {
-                setAlertMessage('Username already in use')
-                setModalVisible(true)
-              } else if (error === 2) {
-                setAlertMessage('Email already in use')
-                setModalVisible(true)
-              } else {
-                setAlertMessage('Error creating account')
-                setModalVisible(true)
-              }
-            })
+            if (username === '') {
+              setAlertMessage('username cannot be empty')
+              setModalVisible(true)
+            } else if (email === '') {
+              setAlertMessage('email cannot be empty')
+              setModalVisible(true)
+            } else if (password === '') {
+              setAlertMessage('password cannot be empty')
+              setModalVisible(true)
+            } else {
+              createAccount(username, email, password).then((error) => {
+                if (error === 0) {
+                  navigate('login')
+                } else if (error === 1) {
+                  setAlertMessage('username already in use')
+                  setModalVisible(true)
+                } else if (error === 2) {
+                  setAlertMessage('email already in use')
+                  setModalVisible(true)
+                } else {
+                  setAlertMessage('error creating account')
+                  setModalVisible(true)
+                }
+              })
+            }
           }}
         >
           <Text style={styles.createButtonText}>Create</Text>

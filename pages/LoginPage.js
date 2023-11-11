@@ -75,7 +75,7 @@ function LoginPage(props) {
             if (success) {
               navigate('home')
             } else {
-              setAlertMessage('Username or password is invalid')
+              setAlertMessage('invalid login')
               setModalVisible(true)
             }
           })

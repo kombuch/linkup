@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
   },
   buttonText: { fontSize: 15 },
   buttonClose: {
@@ -80,7 +79,8 @@ const styles = StyleSheet.create({
   messageText: {
     marginTop: 5,
     marginBottom: 25,
-    fontSize: 25,
+    fontSize: 20,
+    fontFamily: 'Futura',
     textAlign: 'center',
   },
 })
