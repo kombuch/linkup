@@ -209,6 +209,25 @@ export const attendEvent = async (eventId) => {
   }
   return false
 }
+
+export const unAttendEvent = async (eventId) => {
+  try {
+    const events = await getEvents()
+    if (events == null) return false
+    const curUser = await getCurrentUsername()
+    events[eventId].usersAttending = events[eventId].usersAttending.filter(
+      (user) => user !== curUser
+    )
+    delete events[eventId].ratings[await getCurrentUsername()]
+    const jsonValue = JSON.stringify(events)
+    await AsyncStorage.setItem('events', jsonValue)
+    return true
+  } catch (e) {
+    // saving error
+  }
+  return false
+}
+
 export const rateEvent = async (eventId, fiveScore) => {
   try {
     const events = await getEvents()

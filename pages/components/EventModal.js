@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import StarRating from 'react-native-star-rating-widget'
-import { attendEvent, getUserRatingText, rateEvent } from '../util/Storage'
+import { attendEvent, unAttendEvent, getUserRatingText, rateEvent } from '../util/Storage'
 import { convertTime } from '../util/Time'
 
 function EventModal(props) {
@@ -39,6 +39,7 @@ function EventModal(props) {
   const [isAttending, setAttending] = useState(usersAttending.includes(currentUser))
   console.log('I ran again!!!!')
 
+  const [showRating, setShowRating] = useState(modalEventRateable)
   const [hostRatingText, setModalUserRating] = useState('')
   const [rating, setRating] = useState(ratings[currentUser])
   const [attendanceCount, setModalEventAttendance] = useState(usersAttending.length)
@@ -77,7 +78,7 @@ function EventModal(props) {
               <Text style={styles.modalText}>{`Hosted by ${hostUsername}`}</Text>
               <Text style={styles.modalText}>{`${hostRatingText}`}</Text>
               <Text style={styles.modalText}>{`${attendanceCount} Attending`}</Text>
-              {modalEventRateable && (
+              {showRating && (
                 <StarRating
                   rating={rating}
                   onChange={(number) => {
@@ -103,11 +104,31 @@ function EventModal(props) {
                     style={styles.button}
                     onPress={() => {
                       setAttending(true)
+                      setShowRating(modalEventRateable)
                       attendEvent(id).then(() => updateEventListing())
                       setModalEventAttendance(attendanceCount + 1)
                     }}
                   >
                     <Text style={styles.textStyle}>Attend</Text>
+                  </Pressable>
+                )}
+                {isAttending && !preview && !isHosting && (
+                  <Pressable
+                    style={styles.button}
+                    onPress={() => {
+                      setAttending(false)
+                      setShowRating(false)
+                      unAttendEvent(id).then(() => {
+                        updateEventListing()
+                        getUserRatingText(hostUsername).then((text) => {
+                          setModalUserRating(text)
+                        })
+                        setRating(0)
+                      })
+                      setModalEventAttendance(attendanceCount - 1)
+                    }}
+                  >
+                    <Text style={styles.textStyle}>Cancel Attend</Text>
                   </Pressable>
                 )}
                 {isHosting && !preview && (
