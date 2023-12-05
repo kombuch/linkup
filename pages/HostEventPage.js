@@ -148,8 +148,8 @@ function HostEventPage(props) {
       </View>
       <TimePickerModal
         visible={startTimeModalVisible}
-        hours={12}
-        minutes={14}
+        hours={eventStartTime.getHours()}
+        minutes={eventStartTime.getMinutes()}
         onDismiss={() => setStartTimeModalVisible(false)}
         onConfirm={({ hours, minutes }) => {
           setStartTimeModalVisible(false)
@@ -161,8 +161,8 @@ function HostEventPage(props) {
       />
       <TimePickerModal
         visible={endTimeModalVisible}
-        hours={12}
-        minutes={14}
+        hours={eventEndTime.getHours()}
+        minutes={eventEndTime.getMinutes()}
         onDismiss={() => setEndTimeModalVisible(false)}
         onConfirm={({ hours, minutes }) => {
           setEndTimeModalVisible(false)
@@ -186,6 +186,9 @@ function HostEventPage(props) {
               setAlertMessage('location cannot be empty')
               setAlertVisible(true)
               validInputs = false
+            } else if (eventEndTime < new Date()) {
+              setAlertMessage('event end time must be in the future')
+              setAlertVisible(true)
             } else if (eventEndTime < eventStartTime) {
               validInputs = false
               setAlertMessage('event must start before it ends')
