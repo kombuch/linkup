@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+const currentVersion = '1.0'
+
 // event methods
 export const getUsers = async () => {
   try {
@@ -15,6 +17,24 @@ export const getUsers = async () => {
     // error reading value
   }
   return {}
+}
+
+// return true if wiped
+export const wipeStorageIfOutdated = async () => {
+  try {
+    const version = await AsyncStorage.getItem('version')
+    console.log(`version: ${version}`)
+    if (version !== currentVersion) {
+      console.log('non-Empty users')
+      AsyncStorage.clear()
+      await AsyncStorage.setItem('version', currentVersion)
+      return true
+    }
+    return false
+  } catch (e) {
+    // error reading value
+  }
+  return false
 }
 
 // store users as objects in object indexed by email
@@ -139,7 +159,7 @@ export const getEvents = async () => {
   }
   return []
 }
-export const addEvent = async (eventName, eventTime, minuteDuration, eventLocation) => {
+export const addEvent = async (eventName, eventTime, eventEnd, eventLocation) => {
   try {
     const events = await getEvents()
     if (events == null) return false
@@ -148,8 +168,7 @@ export const addEvent = async (eventName, eventTime, minuteDuration, eventLocati
       id: events.length,
       eventName,
       eventTime,
-      minuteDuration,
-      creationTime: new Date(),
+      eventEnd,
       eventLocation,
       usersAttending: [hostUsername],
       ratings: {},

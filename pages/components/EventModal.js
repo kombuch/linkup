@@ -27,7 +27,7 @@ function EventModal(props) {
     id,
     eventName,
     eventTime,
-    minuteDuration,
+    eventEnd,
     eventLocation,
     usersAttending,
     ratings,
@@ -70,7 +70,7 @@ function EventModal(props) {
             <View style={styles.modalView}>
               <Text style={styles.modalTitleText}>{eventName}</Text>
               <Text style={styles.modalText}>{`${convertTime(eventTime)} - ${convertTime(
-                addMinutes(eventTime, minuteDuration)
+                eventEnd
               )} at ${eventLocation}`}</Text>
               <Text style={styles.modalText}>{`Hosted by ${hostUsername}`}</Text>
               <Text style={styles.modalText}>{`${hostRatingText}`}</Text>

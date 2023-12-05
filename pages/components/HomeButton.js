@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 25,
     textAlign: 'center',
-    color: '#fff',
-    fontFamily: 'Gill Sans',
+    color: '#000',
+    fontFamily: 'Arial',
   },
   logoBG: {
     borderRadius: 40,
@@ -27,6 +27,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 140,
     height: 60,
-    backgroundColor: '#e87500',
+    backgroundColor: '#fff',
   },
 })

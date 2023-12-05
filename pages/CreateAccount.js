@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: 'center',
     color: '#fff',
-    fontFamily: 'Gill Sans',
+    fontFamily: 'Arial',
   },
   createButtonBG: {
     borderRadius: 40,

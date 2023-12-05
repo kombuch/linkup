@@ -1,62 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TextInput } from 'react-native'
 
+import { TimePickerModal } from 'react-native-paper-dates'
 import PreviewButton from './components/PreviewButton'
 import BackButton from './components/BackButton'
 import { addEvent, getCurrentUsername } from './util/Storage'
 import EventModal from './components/EventModal'
+import TextButton from './components/TextButton'
+import { convertTime } from './util/Time'
+import AlertModal from './components/AlertModal'
 
 function HostEventPage(props) {
   const { navigate } = props
 
   const now = new Date()
-  const hour24 = now.getHours()
-  const min = now.getMinutes().toLocaleString('en-US', {
-    minimumIntegerDigits: 2,
-    useGrouping: false,
-  })
-  const ampm = hour24 < 12 ? 'am' : 'pm'
-  const hours = hour24 < 13 ? hour24 : hour24 - 12
+  const nowPlus1 = new Date()
+  nowPlus1.setHours(nowPlus1.getHours() + 1)
 
   const [eventName, setEventName] = useState('')
-  const [eventTime, setEventTime] = useState(`${hours}:${min}${ampm}`)
-  const [duration, setDuration] = useState('60')
+  const [eventStartTime, setEventStartTime] = useState(now)
+  const [eventEndTime, setEventEndTime] = useState(nowPlus1)
   const [eventLocation, setEventLocation] = useState('')
-
-  const [invalidTime, setInvalidTime] = useState(false)
-  const [timeBlinking, setTimeBlinking] = useState(false)
 
   const [invalidName, setInvalidName] = useState(false)
   const [nameBlinking, setNameBlinking] = useState(false)
 
-  const [invalidDuration, setInvalidDuration] = useState(false)
-  const [durationBlinking, setDurationBlinking] = useState(false)
-
-  useEffect(() => {
-    if (timeBlinking) {
-      setTimeout(() => {
-        setInvalidTime(true)
-      }, 250)
-      setTimeout(() => {
-        setInvalidTime(false)
-      }, 500)
-      setTimeout(() => {
-        setInvalidTime(true)
-      }, 750)
-      setTimeout(() => {
-        setInvalidTime(false)
-        setTimeBlinking(false)
-      }, 1000)
-      setTimeout(() => {
-        setInvalidTime(true)
-        setTimeBlinking(false)
-      }, 1250)
-      setTimeout(() => {
-        setInvalidTime(false)
-        setTimeBlinking(false)
-      }, 1500)
-    }
-  }, [timeBlinking])
+  const [alertMessage, setAlertMessage] = useState('')
+  const [alertVisible, setAlertVisible] = useState(false)
 
   useEffect(() => {
     if (nameBlinking) {
@@ -82,46 +52,23 @@ function HostEventPage(props) {
     }
   }, [nameBlinking])
 
-  useEffect(() => {
-    if (durationBlinking) {
-      setTimeout(() => {
-        setInvalidDuration(true)
-      }, 250)
-      setTimeout(() => {
-        setInvalidDuration(false)
-      }, 500)
-      setTimeout(() => {
-        setInvalidDuration(true)
-      }, 750)
-      setTimeout(() => {
-        setInvalidDuration(false)
-      }, 1000)
-      setTimeout(() => {
-        setInvalidDuration(true)
-      }, 1250)
-      setTimeout(() => {
-        setInvalidDuration(false)
-        setDurationBlinking(false)
-      }, 1500)
-    }
-  }, [durationBlinking])
-
   const [user, setUser] = useState(null)
 
   useEffect(() => {
     getCurrentUsername().then((data) => setUser(data))
   }, [])
 
-  const [modalVisible, setModalVisible] = useState(false)
+  const [startTimeModalVisible, setStartTimeModalVisible] = useState(false)
+  const [endTimeModalVisible, setEndTimeModalVisible] = useState(false)
+  const [previewVisible, setPreviewVisible] = useState(false)
   const [modalEvent, setModalEvent] = useState()
 
-  const openPreview = (date) => {
-    const minuteDuration = parseInt(duration, 10)
+  const openPreview = () => {
     setModalEvent({
       id: -1,
       eventName,
-      eventTime: date,
-      minuteDuration,
+      eventTime: eventStartTime,
+      eventEnd: eventEndTime,
       creationTime: new Date(),
       eventLocation,
       usersAttending: [user],
@@ -129,14 +76,14 @@ function HostEventPage(props) {
       deleted: false,
       hostUsername: user,
     })
-    setModalVisible(true)
+    setPreviewVisible(true)
   }
 
   const create = () => {
     addEvent(
       modalEvent.eventName,
       modalEvent.eventTime,
-      modalEvent.minuteDuration,
+      modalEvent.eventEnd,
       modalEvent.eventLocation
     ).then((success) => {
       if (success) navigate('home')
@@ -148,12 +95,12 @@ function HostEventPage(props) {
       <View style={styles.topContainer}>
         <Text style={styles.header}>Create Event</Text>
       </View>
-      {modalEvent != null && modalVisible && (
+      {modalEvent != null && previewVisible && (
         <EventModal
           event={modalEvent}
           currentUser={user}
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
+          modalVisible={previewVisible}
+          setModalVisible={setPreviewVisible}
           preview
           previewOnPress={create}
         />
@@ -170,36 +117,6 @@ function HostEventPage(props) {
           </View>
         </View>
         <View style={styles.inputAndTextContainer}>
-          {invalidTime ? (
-            <Text style={styles.badInputLabel}>Start Time</Text>
-          ) : (
-            <Text style={styles.inputLabel}>Start Time</Text>
-          )}
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.inputText}
-              value={eventTime}
-              onChangeText={setEventTime}
-              placeholder="ex: 5:20pm"
-            />
-          </View>
-        </View>
-        <View style={styles.inputAndTextContainer}>
-          {invalidDuration ? (
-            <Text style={styles.badInputLabel}>Duration (Minutes)</Text>
-          ) : (
-            <Text style={styles.inputLabel}>Duration (Minutes)</Text>
-          )}
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.inputText}
-              value={duration}
-              onChangeText={setDuration}
-              placeholder="ex: 60"
-            />
-          </View>
-        </View>
-        <View style={styles.inputAndTextContainer}>
           <Text style={styles.inputLabel}>Location</Text>
           <View style={styles.inputContainer}>
             <TextInput
@@ -209,37 +126,83 @@ function HostEventPage(props) {
             />
           </View>
         </View>
+        <View style={styles.listItem}>
+          <View style={styles.timeContainer}>
+            <View style={styles.timeText}>
+              <Text style={styles.inputLabel}>Start Time:</Text>
+            </View>
+            <TextButton
+              text={convertTime(eventStartTime)}
+              onPress={() => setStartTimeModalVisible(true)}
+            />
+          </View>
+          <View style={styles.timeContainer}>
+            <View style={styles.timeText}>
+              <Text style={styles.inputLabel}>End Time: </Text>
+            </View>
+            <TextButton
+              text={convertTime(eventEndTime)}
+              onPress={() => setEndTimeModalVisible(true)}
+            />
+          </View>
+        </View>
       </View>
+      <TimePickerModal
+        visible={startTimeModalVisible}
+        hours={12}
+        minutes={14}
+        onDismiss={() => setStartTimeModalVisible(false)}
+        onConfirm={({ hours, minutes }) => {
+          setStartTimeModalVisible(false)
+          const dateTime = new Date()
+          dateTime.setHours(hours)
+          dateTime.setMinutes(minutes)
+          setEventStartTime(dateTime)
+        }}
+      />
+      <TimePickerModal
+        visible={endTimeModalVisible}
+        hours={12}
+        minutes={14}
+        onDismiss={() => setEndTimeModalVisible(false)}
+        onConfirm={({ hours, minutes }) => {
+          setEndTimeModalVisible(false)
+          const dateTime = new Date()
+          dateTime.setHours(hours)
+          dateTime.setMinutes(minutes)
+          setEventEndTime(dateTime)
+        }}
+      />
       <View style={styles.bottomContainer}>
         <BackButton navigate={navigate} dest="home" />
         <PreviewButton
           onPress={() => {
             // TODO - Input checking
-            const date = ampmTo24H(eventTime)
             let validInputs = true
-            if (Number.isNaN(date)) {
-              setEventTime('')
-              setTimeBlinking(true)
-              validInputs = false
-            }
             if (eventName === '') {
-              setNameBlinking(true)
+              setAlertMessage('name cannot be empty')
+              setAlertVisible(true)
               validInputs = false
-            }
-            if (Number.isNaN(parseInt(duration, 10))) {
-              setDuration('')
-              setDurationBlinking(true)
+            } else if (eventLocation === '') {
+              setAlertMessage('location cannot be empty')
+              setAlertVisible(true)
               validInputs = false
-            } else {
-              console.log(`duration: ${duration}`)
-            }
-            if (validInputs) {
-              console.log(`ds: ${date.toDateString()}`)
-              openPreview(date)
+            } else if (eventEndTime < eventStartTime) {
+              validInputs = false
+              setAlertMessage('event must start before it ends')
+              setAlertVisible(true)
+            } else if (validInputs) {
+              openPreview()
             }
           }}
         />
       </View>
+
+      <AlertModal
+        message={alertMessage}
+        modalVisible={alertVisible}
+        setModalVisible={setAlertVisible}
+      />
     </View>
   )
 }
@@ -273,6 +236,7 @@ const ampmTo24H = (t) => {
 
   let hoursI = parseInt(hours, 10)
   let minI = parseInt(minutes, 10)
+  if (Number.isNaN(hoursI)) return null
   minI = Number.isNaN(minI) ? 0 : minI
   console.log(`converted: ${hoursI}:${minI}`)
   if (pm && hoursI < 12) {
@@ -291,20 +255,20 @@ const styles = StyleSheet.create({
     fontSize: 35,
     textAlign: 'center',
     color: '#fff',
-    fontFamily: 'Gill Sans',
+    fontFamily: 'Arial',
   },
   inputLabel: {
     fontSize: 25,
     textAlign: 'left',
     color: '#fff',
-    fontFamily: 'Gill Sans',
+    fontFamily: 'Arial',
     marginLeft: '14%',
   },
   badInputLabel: {
     fontSize: 25,
     textAlign: 'left',
     color: 'red',
-    fontFamily: 'Gill Sans',
+    fontFamily: 'Arial',
     marginLeft: '14%',
   },
 
@@ -324,6 +288,24 @@ const styles = StyleSheet.create({
     width: '80%',
     maxWidth: 550,
     alignSelf: 'center',
+    flex: 2,
+  },
+  timeContainer: {
+    width: '80%',
+    maxWidth: 550,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginBottom: 40,
+  },
+  listItem: {
+    flex: 4,
+  },
+  timeText: {
+    alignContent: 'flex-start',
+    justifyContent: 'center',
+    height: 45,
+    width: 180,
   },
   inputText: {
     height: 50,
@@ -351,7 +333,7 @@ const styles = StyleSheet.create({
     gap: 30,
   },
   listContainer: {
-    flex: 8,
+    flex: 6,
   },
   input: {
     borderWidth: 1,

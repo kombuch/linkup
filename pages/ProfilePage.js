@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: '100%',
     maxWidth: 600,
+    minHeight: 60,
   },
   bottomContainer: {
     flex: 1,

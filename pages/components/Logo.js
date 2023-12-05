@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     textAlign: 'center',
     color: '#fff',
-    fontFamily: 'Gill Sans',
+    fontFamily: 'Arial',
   },
   logoBG: {
     borderRadius: 20,

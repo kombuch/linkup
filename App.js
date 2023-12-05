@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import { MD3DarkTheme as DefaultTheme, PaperProvider } from 'react-native-paper'
 
 import CreateAccount from './pages/CreateAccount'
 import HomePage from './pages/HomePage'
@@ -30,21 +31,23 @@ function App() {
   }
 
   return (
-    <View
-      style={{
-        ...styles.container,
-      }}
-    >
-      {currentPage === 'login' ? <LoginPage navigate={navigate} goBack={goBack} /> : null}
-      {currentPage === 'home' ? <HomePage navigate={navigate} goBack={goBack} /> : null}
-      {currentPage === 'host' ? <HostEventPage navigate={navigate} goBack={goBack} /> : null}
-      {currentPage === 'join' ? <JoinEventPage navigate={navigate} goBack={goBack} /> : null}
-      {currentPage === 'profile' ? <ProfilePage navigate={navigate} goBack={goBack} /> : null}
-      {currentPage === 'createaccount' ? (
-        <CreateAccount navigate={navigate} goBack={goBack} />
-      ) : null}
-      <StatusBar />
-    </View>
+    <PaperProvider theme={theme}>
+      <View
+        style={{
+          ...styles.container,
+        }}
+      >
+        {currentPage === 'login' ? <LoginPage navigate={navigate} goBack={goBack} /> : null}
+        {currentPage === 'home' ? <HomePage navigate={navigate} goBack={goBack} /> : null}
+        {currentPage === 'host' ? <HostEventPage navigate={navigate} goBack={goBack} /> : null}
+        {currentPage === 'join' ? <JoinEventPage navigate={navigate} goBack={goBack} /> : null}
+        {currentPage === 'profile' ? <ProfilePage navigate={navigate} goBack={goBack} /> : null}
+        {currentPage === 'createaccount' ? (
+          <CreateAccount navigate={navigate} goBack={goBack} />
+        ) : null}
+        <StatusBar />
+      </View>
+    </PaperProvider>
   )
 }
 
@@ -56,3 +59,53 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 })
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+
+    primary: '#154734',
+    secondary: 'white',
+    onSecondaryContainer: 'black',
+    onTertiaryContainer: '#e87500',
+    onErrorContainer: 'black',
+    background: 'white',
+    surfaceVariant: 'gray',
+    surface: '#154734',
+    onPrimary: 'white',
+    onSecondary: 'black',
+    onBackground: 'black',
+    onSurfaceVariant: 'black',
+    onSurface: 'white',
+    outline: 'white',
+    outlineVariant: 'white',
+    onPrimaryContainer: '#e87500',
+    elevation: {
+      level0: 'transparent',
+      // Note: Color values with transparency cause RN to transfer shadows to children nodes
+      // instead of View component in Surface. Providing solid background fixes the issue.
+      // Opaque color values generated with `palette.primary80` used as background
+      level1: '#e87500', // palette.primary80, alpha 0.05
+      level2: '#e87500', // palette.primary80, alpha 0.08
+      level3: 'white', // palette.primary80, alpha 0.11
+      level4: '#e87500', // palette.primary80, alpha 0.12
+      level5: '#e87500', // palette.primary80, alpha 0.14
+    },
+    primaryContainer: '#154734',
+    secondaryContainer: 'white',
+    tertiary: 'white',
+    tertiaryContainer: '#154734',
+    surfaceDisabled: 'white',
+    error: 'white',
+    errorContainer: 'white',
+    onTertiary: 'white',
+    onSurfaceDisabled: 'white',
+    onError: 'white',
+    inverseSurface: 'white',
+    inverseOnSurface: 'white',
+    inversePrimary: 'white',
+    shadow: 'white',
+    scrim: 'white',
+  },
+}

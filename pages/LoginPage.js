@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Logo from './components/Logo'
-import { getCurrentEmail, getCurrentPass, tryLogin } from './util/Storage'
+import { getCurrentEmail, getCurrentPass, tryLogin, wipeStorageIfOutdated } from './util/Storage'
 import AlertModal from './components/AlertModal'
 
 function LoginPage(props) {
@@ -14,6 +14,15 @@ function LoginPage(props) {
   const [tapCount, setTapCount] = useState(0)
   const [alertMessage, setAlertMessage] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
+
+  useEffect(() => {
+    wipeStorageIfOutdated().then((wiped) => {
+      if (wiped) {
+        setEmail('')
+        setPassword('')
+      }
+    })
+  }, [])
 
   useEffect(() => {
     if (tapCount > 5) {
@@ -133,7 +142,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: 'center',
     color: '#fff',
-    fontFamily: 'Gill Sans',
+    fontFamily: 'Arial',
     marginHorizontal: 30,
   },
   button: {

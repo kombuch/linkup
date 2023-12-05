@@ -1,32 +1,33 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-function BackButton(props) {
-  const { navigate, dest } = props
+function TextButton(props) {
+  const { onPress, text } = props
   return (
-    <Pressable onPress={() => navigate(dest)}>
+    <Pressable onPress={onPress}>
       <View style={styles.logoBG}>
-        <Text style={styles.header}>Back</Text>
+        <Text style={styles.header}>{text}</Text>
       </View>
     </Pressable>
   )
 }
 
-export default BackButton
+export default TextButton
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 25,
+    fontSize: 18,
     textAlign: 'center',
     color: '#000',
     fontFamily: 'Arial',
   },
   logoBG: {
-    borderRadius: 40,
+    borderRadius: 10,
     alignContent: 'center',
     justifyContent: 'center',
-    width: 140,
-    height: 60,
+    width: 100,
+    height: 45,
     backgroundColor: '#fff',
+    marginHorizontal: 20,
   },
 })

@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: 'center',
     color: '#000',
-    fontFamily: 'Gill Sans',
+    fontFamily: 'Arial',
   },
   center: {
     alignContent: 'center',
