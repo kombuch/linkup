@@ -209,47 +209,6 @@ function HostEventPage(props) {
 
 export default HostEventPage
 
-const ampmTo24H = (t) => {
-  let pm = false
-  let hours = ''
-  let minutes = ''
-  const time = t.toLowerCase()
-  let part = 0 // hours = 0, min = 1, am/pm = 2
-  for (let i = 0; i < time.length; i += 1) {
-    if (time[i] === ':' || time[i] === ' ') {
-      part += 1
-    } else {
-      if (time[i] === 'p') {
-        pm = true
-        break
-      }
-      if (time[i] === 'a') {
-        break
-      }
-      if (part === 0) {
-        hours += time[i]
-      } else {
-        minutes += time[i]
-      }
-    }
-  }
-
-  let hoursI = parseInt(hours, 10)
-  let minI = parseInt(minutes, 10)
-  if (Number.isNaN(hoursI)) return null
-  minI = Number.isNaN(minI) ? 0 : minI
-  console.log(`converted: ${hoursI}:${minI}`)
-  if (pm && hoursI < 12) {
-    hoursI += 12
-  } else if (!pm && hoursI === 12) {
-    hoursI = 0
-  }
-  const eventDate = new Date()
-  eventDate.setHours(hoursI)
-  eventDate.setMinutes(minI)
-  return eventDate
-}
-
 const styles = StyleSheet.create({
   header: {
     fontSize: 35,

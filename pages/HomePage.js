@@ -6,7 +6,6 @@ import HostButton from './components/HostButton'
 import Logo from './components/Logo'
 import ProfileButton from './components/ProfileButton'
 import { getCurrentUsername, getEvents } from './util/Storage'
-import { addMinutes } from './util/Time'
 import EventModal from './components/EventModal'
 
 function HomePage(props) {
