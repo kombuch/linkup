@@ -257,6 +257,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   listItem: {
+    marginTop: 15,
     flex: 4,
   },
   timeText: {
