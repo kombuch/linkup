@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonText: { fontSize: 15 },
-  deleteButtonText: { fontSize: 15, color: '#fff' },
+  buttonText: { fontSize: 14 },
+  deleteButtonText: { fontSize: 14, color: '#fff' },
   buttonClose: {
     borderRadius: 20,
     padding: 10,

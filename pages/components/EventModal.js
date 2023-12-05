@@ -123,7 +123,7 @@ function EventModal(props) {
                 )}
                 {preview && (
                   <Pressable
-                    style={[styles.button]}
+                    style={styles.button}
                     onPress={() => {
                       previewOnPress()
                       setModalVisible(false)
@@ -144,8 +144,8 @@ function EventModal(props) {
 export default EventModal
 
 const styles = StyleSheet.create({
-  textStyle: { color: '#fff' },
-  closeText: {},
+  textStyle: { fontSize: 14, color: '#fff' },
+  closeText: { fontSize: 14 },
   modalView: {
     margin: 20,
     backgroundColor: '#fff',

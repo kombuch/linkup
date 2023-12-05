@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonText: { fontSize: 15 },
+  buttonText: { fontSize: 14 },
   buttonClose: {
     borderRadius: 20,
     padding: 10,
