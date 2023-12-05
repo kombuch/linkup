@@ -5,8 +5,9 @@ import EventListItem from './components/EventListItem'
 import HostButton from './components/HostButton'
 import Logo from './components/Logo'
 import ProfileButton from './components/ProfileButton'
-import { getCurrentUsername, getEvents } from './util/Storage'
+import { getCurrentUsername, getEvents, deleteEvent } from './util/Storage'
 import EventModal from './components/EventModal'
+import DeleteModal from './components/DeleteModal'
 
 function HomePage(props) {
   const { navigate } = props
@@ -14,6 +15,7 @@ function HomePage(props) {
   const [user, setUser] = useState('username')
 
   const [events, setEvents] = useState([])
+
   useEffect(() => {
     getEvents().then((stored) => {
       setEvents(stored)
@@ -23,11 +25,28 @@ function HomePage(props) {
     console.log(`username: ${user}`)
     getCurrentUsername().then((data) => setUser(data))
   }, [])
+
   const updateEventListing = () => {
     getEvents().then((stored) => {
       setEvents(stored)
       console.log(`updatedEvents: ${stored}`)
     })
+  }
+
+  const openDeleteConfirmation = (id) => {
+    setEventDeleteId(id)
+    setEventDeleteName(events[id].eventName)
+    setDeleteModalVisible(true)
+  }
+
+  const deleteConfirmed = (confirmed) => {
+    if (confirmed) {
+      deleteEvent(eventDeleteId).then(() => {
+        updateEventListing()
+      })
+    } else {
+      setModalVisible(true)
+    }
   }
 
   const [now, setNow] = useState(new Date())
@@ -43,6 +62,10 @@ function HomePage(props) {
   const [modalVisible, setModalVisible] = useState(false)
   const [modalEvent, setModalEvent] = useState()
   const [modalEventRateable, setModalEventRateable] = useState()
+
+  const [eventDeleteName, setEventDeleteName] = useState('EVENTNAME')
+  const [eventDeleteId, setEventDeleteId] = useState(-1)
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false)
 
   const openEvent = (event) => {
     setModalEvent(event)
@@ -65,8 +88,16 @@ function HomePage(props) {
           modalEventRateable={modalEventRateable}
           setModalVisible={setModalVisible}
           updateEventListing={updateEventListing}
+          deleteEvent={openDeleteConfirmation}
         />
       )}
+
+      <DeleteModal
+        eventName={eventDeleteName}
+        modalVisible={deleteModalVisible}
+        setModalVisible={setDeleteModalVisible}
+        deleteConfirmed={deleteConfirmed}
+      />
       <View style={styles.listContainer}>
         <FlatList
           data={events

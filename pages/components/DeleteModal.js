@@ -9,8 +9,8 @@ import {
 } from 'react-native'
 import React from 'react'
 
-function AlertModal(props) {
-  const { message, modalVisible, setModalVisible } = props
+function DeleteModal(props) {
+  const { eventName, modalVisible, setModalVisible, deleteConfirmed } = props
 
   return (
     <Modal
@@ -32,10 +32,29 @@ function AlertModal(props) {
           <TouchableWithoutFeedback>
             {/* prevents from closing when clicking inside modal */}
             <View style={styles.modalView}>
-              <Text style={styles.messageText}>{message}</Text>
-              <Pressable style={styles.buttonClose} onPress={() => setModalVisible(false)}>
-                <Text style={styles.buttonText}>Close</Text>
-              </Pressable>
+              <Text
+                style={styles.messageText}
+              >{`are you sure you wish to delete ${eventName}?`}</Text>
+              <View style={styles.modalButtonContainer}>
+                <Pressable
+                  style={styles.buttonClose}
+                  onPress={() => {
+                    deleteConfirmed(false)
+                    setModalVisible(false)
+                  }}
+                >
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </Pressable>
+                <Pressable
+                  style={styles.buttonDelete}
+                  onPress={() => {
+                    deleteConfirmed(true)
+                    setModalVisible(false)
+                  }}
+                >
+                  <Text style={styles.deleteButtonText}>Delete</Text>
+                </Pressable>
+              </View>
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -44,7 +63,7 @@ function AlertModal(props) {
   )
 }
 
-export default AlertModal
+export default DeleteModal
 
 const styles = StyleSheet.create({
   modalView: {
@@ -71,11 +90,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: { fontSize: 15 },
+  deleteButtonText: { fontSize: 15, color: '#fff' },
   buttonClose: {
     borderRadius: 20,
     padding: 10,
     elevation: 2,
     backgroundColor: '#aaa',
+  },
+  buttonDelete: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    backgroundColor: 'red',
   },
   messageText: {
     marginTop: 5,
@@ -83,5 +109,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Arial',
     textAlign: 'center',
+  },
+  modalButtonContainer: {
+    gap: 20,
+    marginTop: 20,
+    flexDirection: 'row',
   },
 })

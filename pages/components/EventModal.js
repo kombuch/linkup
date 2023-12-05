@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import StarRating from 'react-native-star-rating-widget'
-import { attendEvent, deleteEvent, getUserRatingText, rateEvent } from '../util/Storage'
+import { attendEvent, getUserRatingText, rateEvent } from '../util/Storage'
 import { convertTime } from '../util/Time'
 
 function EventModal(props) {
@@ -22,6 +22,7 @@ function EventModal(props) {
     modalEventRateable,
     preview,
     previewOnPress,
+    deleteEvent,
   } = props
   const {
     id,
@@ -113,11 +114,8 @@ function EventModal(props) {
                   <Pressable
                     style={styles.deleteButton}
                     onPress={() => {
-                      console.log(`deleted event ${id}`)
-                      deleteEvent(id).then(() => {
-                        updateEventListing()
-                        setModalVisible(false)
-                      })
+                      deleteEvent(id)
+                      setModalVisible(false)
                     }}
                   >
                     <Text style={styles.textStyle}>Delete</Text>
