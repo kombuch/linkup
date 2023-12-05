@@ -63,8 +63,9 @@ function ProfilePage(props) {
         <View style={styles.listContainer}>
           <FlatList
             data={events
-              .sort((a, b) => b.eventTime - a.eventTime)
-              .filter((item) => item.hostUsername !== user && item.usersAttending.includes(user))}
+              .filter((item) => !item.deleted)
+              .filter((item) => item.hostUsername !== user && item.usersAttending.includes(user))
+              .sort((a, b) => b.eventTime - a.eventTime)}
             renderItem={({ item }) => (
               <EventListItem event={item} currentUser={user} onPress={openEvent} />
             )}
@@ -75,8 +76,9 @@ function ProfilePage(props) {
         <View style={styles.listContainer}>
           <FlatList
             data={events
-              .sort((a, b) => b.eventTime - a.eventTime)
-              .filter((item) => item.hostUsername === user)}
+              .filter((item) => !item.deleted)
+              .filter((item) => item.hostUsername === user)
+              .sort((a, b) => b.eventTime - a.eventTime)}
             renderItem={({ item }) => (
               <EventListItem event={item} currentUser={user} onPress={openEvent} />
             )}

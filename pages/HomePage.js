@@ -71,6 +71,7 @@ function HomePage(props) {
         <FlatList
           data={events
             .filter((item) => item.eventEnd > now) // filter out past events
+            .filter((item) => !item.deleted)
             .sort((a, b) => a.eventTime - b.eventTime)}
           renderItem={({ item }) => (
             <EventListItem event={item} currentUser={user} onPress={openEvent} />

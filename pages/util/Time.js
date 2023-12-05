@@ -5,7 +5,8 @@ export const convertTime = (date) => {
     useGrouping: false,
   })
   const ampm = hour24 < 12 ? 'AM' : 'PM'
-  const hours = hour24 < 13 ? hour24 : hour24 - 12
+  let hours = hour24 < 13 ? hour24 : hour24 - 12
+  if (hours === 0) hours = 12
   return `${hours}:${min} ${ampm}`
 }
 

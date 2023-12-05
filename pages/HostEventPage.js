@@ -7,15 +7,14 @@ import BackButton from './components/BackButton'
 import { addEvent, getCurrentUsername } from './util/Storage'
 import EventModal from './components/EventModal'
 import TextButton from './components/TextButton'
-import { convertTime } from './util/Time'
+import { addMinutes, convertTime } from './util/Time'
 import AlertModal from './components/AlertModal'
 
 function HostEventPage(props) {
   const { navigate } = props
 
   const now = new Date()
-  const nowPlus1 = new Date()
-  nowPlus1.setHours(nowPlus1.getHours() + 1)
+  const nowPlus1 = addMinutes(now, 60)
 
   const [eventName, setEventName] = useState('')
   const [eventStartTime, setEventStartTime] = useState(now)

@@ -9,8 +9,8 @@ import {
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import StarRating from 'react-native-star-rating-widget'
-import { attendEvent, getUserRatingText, rateEvent } from '../util/Storage'
-import { addMinutes, convertTime } from '../util/Time'
+import { attendEvent, deleteEvent, getUserRatingText, rateEvent } from '../util/Storage'
+import { convertTime } from '../util/Time'
 
 function EventModal(props) {
   const {
@@ -41,6 +41,7 @@ function EventModal(props) {
   const [hostRatingText, setModalUserRating] = useState('')
   const [rating, setRating] = useState(ratings[currentUser])
   const [attendanceCount, setModalEventAttendance] = useState(usersAttending.length)
+  const isHosting = currentUser === hostUsername
 
   useEffect(() => {
     getUserRatingText(hostUsername).then((text) => {
@@ -98,7 +99,7 @@ function EventModal(props) {
                 </Pressable>
                 {!isAttending && !preview && (
                   <Pressable
-                    style={[styles.button]}
+                    style={styles.button}
                     onPress={() => {
                       setAttending(true)
                       attendEvent(id).then(() => updateEventListing())
@@ -106,6 +107,20 @@ function EventModal(props) {
                     }}
                   >
                     <Text style={styles.textStyle}>Attend</Text>
+                  </Pressable>
+                )}
+                {isHosting && !preview && (
+                  <Pressable
+                    style={styles.deleteButton}
+                    onPress={() => {
+                      console.log(`deleted event ${id}`)
+                      deleteEvent(id).then(() => {
+                        updateEventListing()
+                        setModalVisible(false)
+                      })
+                    }}
+                  >
+                    <Text style={styles.textStyle}>Delete</Text>
                   </Pressable>
                 )}
                 {preview && (
@@ -164,6 +179,13 @@ const styles = StyleSheet.create({
     elevation: 2,
     color: '#fff',
     backgroundColor: '#e87500',
+  },
+  deleteButton: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    color: '#fff',
+    backgroundColor: 'red',
   },
   modalButtonContainer: {
     gap: 20,
