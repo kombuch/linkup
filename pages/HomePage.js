@@ -91,7 +91,6 @@ function HomePage(props) {
           deleteEvent={openDeleteConfirmation}
         />
       )}
-
       <DeleteModal
         eventName={eventDeleteName}
         modalVisible={deleteModalVisible}

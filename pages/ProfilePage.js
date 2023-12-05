@@ -2,10 +2,11 @@ import { StyleSheet, Text, View, FlatList, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 import EventListItem from './components/EventListItem'
-import { getCurrentUsername, getEvents } from './util/Storage'
+import { getCurrentUsername, getEvents, deleteEvent } from './util/Storage'
 import HomeButton from './components/HomeButton'
 import LogoutButton from './components/LogoutButton'
 import EventModal from './components/EventModal'
+import DeleteModal from './components/DeleteModal'
 
 const topMargin = Platform.OS === 'web' ? 0 : 40
 
@@ -26,6 +27,26 @@ function ProfilePage(props) {
   const [modalVisible, setModalVisible] = useState(false)
   const [modalEvent, setModalEvent] = useState()
   const [modalEventRateable, setModalEventRateable] = useState()
+
+  const [eventDeleteName, setEventDeleteName] = useState('EVENTNAME')
+  const [eventDeleteId, setEventDeleteId] = useState(-1)
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false)
+
+  const openDeleteConfirmation = (id) => {
+    setEventDeleteId(id)
+    setEventDeleteName(events[id].eventName)
+    setDeleteModalVisible(true)
+  }
+
+  const deleteConfirmed = (confirmed) => {
+    if (confirmed) {
+      deleteEvent(eventDeleteId).then(() => {
+        updateEventListing()
+      })
+    } else {
+      setModalVisible(true)
+    }
+  }
 
   const openEvent = (event) => {
     setModalEvent(event)
@@ -56,8 +77,15 @@ function ProfilePage(props) {
           modalEventRateable={modalEventRateable}
           setModalVisible={setModalVisible}
           updateEventListing={updateEventListing}
+          deleteEvent={openDeleteConfirmation}
         />
       )}
+      <DeleteModal
+        eventName={eventDeleteName}
+        modalVisible={deleteModalVisible}
+        setModalVisible={setDeleteModalVisible}
+        deleteConfirmed={deleteConfirmed}
+      />
       <View style={styles.innerContainer}>
         <Text style={styles.titleText}>Attended Events</Text>
         <View style={styles.listContainer}>
