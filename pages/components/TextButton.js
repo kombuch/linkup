@@ -2,10 +2,10 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
 function TextButton(props) {
-  const { onPress, text } = props
+  const { onPress, text, error } = props
   return (
     <Pressable onPress={onPress}>
-      <View style={styles.logoBG}>
+      <View style={[styles.logoBG, error ? { borderColor: '#c93636', borderWidth: 3 } : {}]}>
         <Text style={styles.header}>{text}</Text>
       </View>
     </Pressable>

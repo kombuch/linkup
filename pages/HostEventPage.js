@@ -111,17 +111,33 @@ function HostEventPage(props) {
           ) : (
             <Text style={styles.inputLabel}>Event Name</Text>
           )}
-          <View style={styles.inputContainer}>
-            <TextInput style={styles.inputText} value={eventName} onChangeText={setEventName} />
+          <View
+            style={[
+              styles.inputContainer,
+              eventName.length === 0 ? { borderColor: '#c93636', borderWidth: 3 } : {},
+            ]}
+          >
+            <TextInput
+              style={styles.inputText}
+              value={eventName}
+              onChangeText={setEventName}
+              placeholder="Enter a name"
+            />
           </View>
         </View>
         <View style={styles.inputAndTextContainer}>
           <Text style={styles.inputLabel}>Location</Text>
-          <View style={styles.inputContainer}>
+          <View
+            style={[
+              styles.inputContainer,
+              eventLocation.length === 0 ? { borderColor: '#c93636', borderWidth: 3 } : {},
+            ]}
+          >
             <TextInput
               style={styles.inputText}
               value={eventLocation}
               onChangeText={setEventLocation}
+              placeholder="Enter a location"
             />
           </View>
         </View>
@@ -142,6 +158,7 @@ function HostEventPage(props) {
             <TextButton
               text={convertTime(eventEndTime)}
               onPress={() => setEndTimeModalVisible(true)}
+              error={eventEndTime < eventStartTime}
             />
           </View>
         </View>
