@@ -158,7 +158,7 @@ function HostEventPage(props) {
             <TextButton
               text={convertTime(eventEndTime)}
               onPress={() => setEndTimeModalVisible(true)}
-              error={eventEndTime < eventStartTime}
+              error={eventEndTime < eventStartTime || eventEndTime < new Date()}
             />
           </View>
         </View>
