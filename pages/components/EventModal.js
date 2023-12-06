@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     color: '#fff',
-    backgroundColor: 'red',
+    backgroundColor: '#fa2d2d',
   },
   modalButtonContainer: {
     gap: 20,
